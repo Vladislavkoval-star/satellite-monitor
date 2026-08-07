@@ -79,20 +79,24 @@ jobs:
       - name: Persist state
         if: always()
         run: |
-          if [ -z "$(git status --porcelain state/)" ]; then
-            echo "state unchanged"; exit 0
-          fi
           git config user.name  "pl-monitor[bot]"
           git config user.email "pl-monitor@users.noreply.github.com"
-          git add state/
-          git commit -m "chore(state): monitor run [skip ci]"
-          # Losing this push means the next run re-reads pre-incident state and
-          # re-alerts a host that is already known down, so it retries rather
-          # than failing the step on the first rejection.
+          # State files are machine-generated and this run holds the newest
+          # observation, so a concurrent push is resolved by replaying our files
+          # onto the new tip rather than by rebasing — rebasing two different
+          # versions of the same JSON just conflicts and loses the commit.
           for i in 1 2 3 4 5; do
-            if git push; then exit 0; fi
-            echo "push rejected, attempt $i — rebasing on origin"
-            git pull --rebase --autostash || git rebase --abort || true
+            git fetch -q origin main
+            git reset -q --mixed origin/main
+            if [ -z "$(git status --porcelain state/)" ]; then
+              echo "state unchanged"; exit 0
+            fi
+            git add state/
+            git commit -q -m "chore(state): monitor run [skip ci]"
+            if git push -q origin HEAD:main; then
+              echo "state pushed on attempt $i"; exit 0
+            fi
+            echo "push lost the race, retrying ($i)"
             sleep $((i * 3))
           done
           echo "::error::state push failed after 5 attempts — следующий прогон может продублировать алерт"

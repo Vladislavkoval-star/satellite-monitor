@@ -33,18 +33,19 @@ jobs:
 
       - name: Commit updated targets
         run: |
-          if [ -z "$(git status --porcelain targets.json)" ]; then
-            echo "targets unchanged"; exit 0
-          fi
           git config user.name  "pl-monitor[bot]"
           git config user.email "pl-monitor@users.noreply.github.com"
-          git add targets.json
-          git commit -m "chore(targets): refresh from GA4 [skip ci]"
-          # This job overlaps a monitor run that pushes state/, so a plain push
-          # loses the weekly refresh to a non-fast-forward rejection.
           for i in 1 2 3 4 5; do
-            if git push; then exit 0; fi
-            git pull --rebase --autostash || git rebase --abort || true
+            git fetch -q origin main
+            git reset -q --mixed origin/main
+            if [ -z "$(git status --porcelain targets.json)" ]; then
+              echo "targets unchanged"; exit 0
+            fi
+            git add targets.json
+            git commit -q -m "chore(targets): refresh from GA4 [skip ci]"
+            if git push -q origin HEAD:main; then
+              echo "targets pushed on attempt $i"; exit 0
+            fi
             sleep $((i * 3))
           done
           echo "::error::targets push failed after 5 attempts"
