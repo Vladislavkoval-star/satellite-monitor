@@ -13,7 +13,9 @@ The monitored list is generated from analytics traffic rather than hand-maintain
 
 Both tiers run in one job every 10 minutes. At this fleet size render is cheap, so a single job pays the setup cost once per cycle instead of twice — and the render tier reads availability state written seconds earlier, which is what makes cross-tier deduplication exact.
 
-A weekly job (`scripts/refresh_targets.py`) rebuilds `targets.json`: the busiest N satellites and the busiest N whitelabels by 30-day sessions. A fixed count rather than a traffic threshold keeps run time and CI cost predictable as traffic moves around — the fleet cannot quietly grow because a few events went on sale. Resize it with the `TOP_N_PER_TYPE` variable.
+A weekly job (`scripts/refresh_targets.py`) rebuilds `targets.json`: the 10 busiest satellites and the 10 busiest whitelabels by 30-day sessions. A fixed count rather than a traffic threshold keeps run time and CI cost predictable as traffic moves around — the fleet cannot quietly grow because a few events went on sale. Resize it with the `TOP_N_PER_TYPE` variable.
+
+Two hygiene filters keep the tail clean: test, staging and preview hostnames are skipped outright, and where both `example.com` and `www.example.com` appear only the busier one takes a slot — the pair serves the same storefront, so monitoring both spends a slot and doubles the alert for one incident.
 
 Raw session counts never reach the repository. The refresh reduces them to a `traffic: high | low` band, which is the only resolution the alerting logic needs.
 
@@ -81,9 +83,9 @@ Measured in CI on a warm cache:
 | Step | Time |
 |---|---|
 | setup-node, caches restored | 18 s |
-| availability tier | 4 s |
-| render tier (concurrency 2) | 29 s |
-| **whole job** | **59 s → billed 1 min** |
+| availability tier, 20 hosts | 8 s |
+| render tier, 20 hosts (concurrency 2) | 60 s |
+| **whole job** | **~90 s** |
 
 The repository is public, so Actions minutes are **free and unmetered** — this is the reason a 10-minute interval is affordable at all. On a private repo the same schedule would be roughly 4400 minutes a month against a 2000-minute allowance.
 
@@ -105,7 +107,7 @@ Repository **variables**:
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `TOP_N_PER_TYPE` | `5` | how many satellites and whitelabels to monitor |
+| `TOP_N_PER_TYPE` | `10` | how many satellites and whitelabels to monitor |
 | `EXCLUDED_HOSTS` | empty | comma-separated hosts that appear in analytics but are not ours to monitor |
 
 Nothing credential-shaped is committed. The Telegram helper deliberately never logs an API response body, because the request path contains the bot token.

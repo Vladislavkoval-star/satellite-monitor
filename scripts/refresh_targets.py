@@ -38,7 +38,7 @@ TARGETS_FILE = ROOT / "targets.json"
 # Monitor the N busiest satellites and the N busiest whitelabels by 30-day
 # traffic. A fixed count rather than a traffic threshold keeps the fleet size —
 # and therefore the CI cost and the run time — predictable as traffic moves.
-TOP_N_PER_TYPE = int(os.environ.get("TOP_N_PER_TYPE", "5"))
+TOP_N_PER_TYPE = int(os.environ.get("TOP_N_PER_TYPE", "10"))
 # buy.* and checkout.* subdomains are excluded: they are checkout screens rather
 # than storefronts, and are not monitored in this configuration.
 EXCLUDE_MONEY_PATH = os.environ.get("EXCLUDE_MONEY_PATH", "1") == "1"
@@ -66,10 +66,18 @@ GEO_SUBDOMAINS = set(
 )
 
 
+# Hosts that show up in analytics but are never worth paging a human about:
+# test and staging environments, preview deployments, local dev names.
+JUNK_PREFIXES = ("test.", "staging.", "stage.", "dev.", "preview.", "demo.", "sandbox.")
+JUNK_SUBSTRINGS = (".test.", ".staging.", ".dev.", "vercel.app", "netlify.app", "ngrok")
+
+
 def classify(host: str) -> str:
     if host.startswith("(") or not host.strip():
         return "skip"
     if host.endswith(".loc") or "translate.goog" in host or "workable.com" in host:
+        return "skip"
+    if host.startswith(JUNK_PREFIXES) or any(s in host for s in JUNK_SUBSTRINGS):
         return "skip"
     if host in {"platinumlist.net", "www.platinumlist.net"}:
         return "main"
@@ -144,6 +152,24 @@ def pick_probe_path(target: dict) -> dict:
 HIGH_TRAFFIC_SESSIONS_30D = int(os.environ.get("HIGH_TRAFFIC_SESSIONS_30D", "500"))
 
 
+def drop_www_duplicates(hosts: list[dict]) -> list[dict]:
+    """Keep only the busier of `example.com` and `www.example.com`.
+
+    Both usually serve the same storefront, so monitoring the pair spends a slot
+    and doubles the alert for one incident. Expects the list sorted by traffic
+    descending, so the first one seen wins.
+    """
+    kept: list[dict] = []
+    seen: set[str] = set()
+    for host in hosts:
+        bare = host["host"][4:] if host["host"].startswith("www.") else host["host"]
+        if bare in seen:
+            continue
+        seen.add(bare)
+        kept.append(host)
+    return kept
+
+
 def strip_traffic_figures(target: dict) -> dict:
     """Replace raw GA4 session counts with a coarse band before writing to disk.
 
@@ -200,7 +226,7 @@ def main() -> int:
     candidates = []
     for kind, hosts in by_kind.items():
         hosts.sort(key=lambda item: -item["s30"])
-        candidates.extend(hosts[:TOP_N_PER_TYPE])
+        candidates.extend(drop_www_duplicates(hosts)[:TOP_N_PER_TYPE])
     candidates.sort(key=lambda item: -item["s30"])
     with ThreadPoolExecutor(max_workers=8) as pool:
         targets = list(pool.map(pick_probe_path, candidates))
