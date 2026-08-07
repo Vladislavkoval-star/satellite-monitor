@@ -2,8 +2,10 @@ name: monitor
 
 on:
   schedule:
-    # Every 30 minutes, both tiers.
-    - cron: '*/30 * * * *'
+    # Every 10 minutes, both tiers. The repository is public, so Actions minutes
+    # are free and unmetered; the only real budget is the ~60s the job takes,
+    # well inside the interval, and `concurrency` queues any overlap.
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 # One job runs both tiers: at this fleet size the render tier is cheap, and a

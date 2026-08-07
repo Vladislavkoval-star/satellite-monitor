@@ -11,7 +11,7 @@ The monitored list is generated from analytics traffic rather than hand-maintain
 | **Availability** (`scripts/check.mjs`) | DNS not resolving, or resolving on only some resolvers; timeouts; 4xx/5xx; WordPress and nginx error pages; empty responses; TLS certificates expiring within 14 days |
 | **Render** (`scripts/render.mjs`) | the page returns 200 but the storefront is blank, has no title, has nothing to buy, or shows an empty catalogue |
 
-Both tiers run in one job every 30 minutes. At this fleet size render is cheap, so a single job pays the setup cost once per cycle instead of twice — and the render tier reads availability state written seconds earlier, which is what makes cross-tier deduplication exact.
+Both tiers run in one job every 10 minutes. At this fleet size render is cheap, so a single job pays the setup cost once per cycle instead of twice — and the render tier reads availability state written seconds earlier, which is what makes cross-tier deduplication exact.
 
 A weekly job (`scripts/refresh_targets.py`) rebuilds `targets.json`: the busiest N satellites and the busiest N whitelabels by 30-day sessions. A fixed count rather than a traffic threshold keeps run time and CI cost predictable as traffic moves around — the fleet cannot quietly grow because a few events went on sale. Resize it with the `TOP_N_PER_TYPE` variable.
 
@@ -68,7 +68,7 @@ So the job pings `HEARTBEAT_URL` after a successful run, and an external watchdo
 
 Set it up with any dead-man's-switch service — [healthchecks.io](https://healthchecks.io) has a free tier and needs no card:
 
-1. Create a check with period 30 minutes and grace 90 minutes (two missed runs).
+1. Create a check with period 10 minutes and grace 30 minutes (two missed runs).
 2. Copy its ping URL.
 3. Add it as the repository secret `HEARTBEAT_URL`.
 
@@ -85,7 +85,9 @@ Measured in CI on a warm cache:
 | render tier (concurrency 2) | 29 s |
 | **whole job** | **59 s → billed 1 min** |
 
-Every 30 minutes is roughly 1460 minutes a month. Node modules and the Chromium download are cached, and `--with-deps` only runs on a cache miss; without that the job would exceed a minute and double the bill.
+The repository is public, so Actions minutes are **free and unmetered** — this is the reason a 10-minute interval is affordable at all. On a private repo the same schedule would be roughly 4400 minutes a month against a 2000-minute allowance.
+
+Node modules and the Chromium download are cached, and `--with-deps` only runs on a cache miss, which is what keeps the job inside a minute.
 
 ## Configuration
 
