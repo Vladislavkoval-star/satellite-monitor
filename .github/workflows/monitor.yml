@@ -1,0 +1,91 @@
+name: monitor
+
+on:
+  schedule:
+    # Every 30 minutes, both tiers.
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+# One job runs both tiers: at this fleet size the render tier is cheap, and a
+# single job pays the ~15s setup cost once per cycle instead of twice. It also
+# means the render tier reads availability state written seconds earlier.
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/playwright'].version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache node_modules
+        id: node-cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Cache Chromium
+        id: browser-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+
+      # System libraries are only fetched on a cache miss; --with-deps runs apt
+      # and costs ~15s, which is most of the setup budget on a warm run.
+      - name: Install Chromium
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Availability check
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scripts/check.mjs
+
+      - name: Render check
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scripts/render.mjs
+
+      # Dead man's switch. The external watchdog alerts when this ping stops
+      # arriving — silence in Telegram otherwise looks identical to good health.
+      # Deliberately not `if: always()`: a failed run must not report healthy.
+      - name: Ping heartbeat
+        if: success() && env.HEARTBEAT_URL != ''
+        env:
+          HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+        run: curl -fsS --retry 3 --max-time 20 "$HEARTBEAT_URL" > /dev/null
+
+      - name: Persist state
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain state/)" ]; then
+            git config user.name  "pl-monitor[bot]"
+            git config user.email "pl-monitor@users.noreply.github.com"
+            git add state/
+            git commit -m "chore(state): monitor run [skip ci]"
+            git pull --rebase --autostash
+            git push
+          else
+            echo "state unchanged"
+          fi

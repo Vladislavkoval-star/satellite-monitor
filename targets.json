@@ -1,0 +1,66 @@
+{
+ "generated_from": "GA4",
+ "rule": "top 5 satellites + top 5 whitelabels by 30-day sessions",
+ "targets": [
+  {
+   "host": "laperle.platinumlist.net",
+   "type": "satellite",
+   "probe": "/robots.txt",
+   "traffic": "high"
+  },
+  {
+   "host": "dubaicomedyfestival.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "esports-world-cup.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "www.beattheheatdxb.ae",
+   "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "aseer-experiences.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "meryal-waterpark.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "sportsparkoman.com",
+   "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "ibiza-tickets.co",
+   "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "tickets.expocitydubai.com",
+   "type": "whitelabel",
+   "probe": "/",
+   "traffic": "high"
+  },
+  {
+   "host": "london-tickets.uk",
+   "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "low"
+  }
+ ]
+}

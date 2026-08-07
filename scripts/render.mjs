@@ -1,0 +1,229 @@
+/**
+ * Render tier. Runs hourly.
+ *
+ * Opens each target in a real Chromium so Queue-it's JavaScript challenge is
+ * satisfied, then asserts the page actually rendered: non-empty title, real
+ * body text, no WordPress/nginx error signature, and at least one purchase
+ * affordance (ticket link, price, or buy button).
+ *
+ * This is the tier that catches "HTTP 200 but the storefront is a white screen"
+ * — the Redis-cache class of failure that a status-code check cannot see.
+ */
+import { chromium } from 'playwright';
+import {
+  CONFIG,
+  EMPTY_CATALOGUE_SIGNATURES,
+  FAILURE_SIGNATURES,
+  PATHS,
+  USER_AGENT,
+  loadTargets,
+} from './lib/config.mjs';
+import { emptyHostState, loadState, saveState } from './lib/state.mjs';
+import { formatRenderAlert, sendTelegram } from './lib/notify.mjs';
+
+const DRY_RUN = process.argv.includes('--dry-run');
+const NAV_TIMEOUT_MS = CONFIG.renderNavTimeoutMs;
+const QUEUE_HOST = 'queue.platinumlist.net';
+
+/**
+ * Does the page offer something to buy?
+ *
+ * Deliberately not selector-only. The high-traffic satellites are React SPAs
+ * with hashed CSS-module class names (`__btn__o8yUqpBOi6`) and `javascript:void(0)`
+ * navigation, so href and class-name matching finds nothing on a perfectly
+ * healthy storefront — the busiest satellite in the fleet has dozens of working
+ * buttons and zero matchable hrefs. Any one of these signals is enough.
+ */
+const PRICE_PATTERN = /\b(AED|USD|QAR|OMR|BHD|SAR|KWD|EGP|MAD|GBP|EUR|TRY)\s?\d|[£$€]\s?\d/i;
+const PURCHASE_TEXT_PATTERN = /\b(buy|book now|book tickets|get tickets|tickets from|select tickets|add to cart|from\s+[£$€]?\d)/i;
+const PURCHASE_LINK_SELECTOR =
+  'a[href*="/event"], a[href*="ticket"], a[href*="checkout"], a[href*="buy"], a[href*="/booking"]';
+
+async function hasPurchaseAffordance(page, text) {
+  if (PRICE_PATTERN.test(text)) return 'цена в тексте';
+  if (PURCHASE_TEXT_PATTERN.test(text)) return 'CTA в тексте';
+  if ((await page.locator(PURCHASE_LINK_SELECTOR).count()) > 0) return 'ссылка покупки';
+  // An SPA storefront is button-driven. Three or more is well clear of the
+  // one-or-two buttons a cookie banner or language switcher would contribute.
+  if ((await page.locator('button').count()) >= 3) return 'интерактивные кнопки';
+  return null;
+}
+
+async function renderCheck(page, host) {
+  const url = `https://${host}/`;
+  try {
+    const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: NAV_TIMEOUT_MS });
+
+    // Queue-it bounces the first request; a real browser is waved straight
+    // back through when the queue is empty. Give it room to complete.
+    if (page.url().includes(QUEUE_HOST)) {
+      await page
+        .waitForURL((u) => !u.href.includes(QUEUE_HOST), { timeout: 45000 })
+        .catch(() => {});
+      if (page.url().includes(QUEUE_HOST)) {
+        return { host, ok: true, note: 'сидит в Queue-it — очередь активна, не считаем падением' };
+      }
+    }
+
+    await page.waitForLoadState('networkidle', { timeout: 20000 }).catch(() => {});
+
+    const status = response?.status() ?? null;
+    if (status && status >= 400) {
+      return { host, ok: false, reason: `HTTP ${status} при рендере` };
+    }
+
+    const title = (await page.title()).trim();
+    const text = (await page.evaluate(() => document.body?.innerText ?? '')).trim();
+    const lower = text.toLowerCase();
+
+    const signature = FAILURE_SIGNATURES.find((s) => lower.includes(s));
+    if (signature) {
+      return {
+        host,
+        ok: false,
+        reason: `на странице "${signature}"`,
+        emptyCatalogue: EMPTY_CATALOGUE_SIGNATURES.includes(signature),
+      };
+    }
+
+    // buy.* and checkout.* are in-app screens, not indexed pages: several ship
+    // with an empty <title> while working perfectly
+    // (buy.meryal-waterpark.tickets-doha.co renders 2.5k chars of real product).
+    // Treating that as an outage would be a false alarm, so the title assertion
+    // applies to storefronts only.
+    const isCheckoutApp = /^(buy|checkout)\./.test(host);
+    if (!isCheckoutApp && title.length === 0) {
+      return { host, ok: false, reason: 'пустой <title>' };
+    }
+    if (text.length < CONFIG.minRenderedTextLength) {
+      return { host, ok: false, reason: `почти пустая страница (${text.length} символов текста)` };
+    }
+
+    const affordance = await hasPurchaseAffordance(page, text);
+    if (!affordance) {
+      return { host, ok: false, reason: 'нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты' };
+    }
+
+    return { host, ok: true, title, textLength: text.length, affordance };
+  } catch (err) {
+    const reason =
+      err.name === 'TimeoutError'
+        ? `не отрисовалась за ${NAV_TIMEOUT_MS / 1000}с`
+        : `ошибка браузера: ${String(err.message).split('\n')[0].slice(0, 120)}`;
+    return { host, ok: false, reason };
+  }
+}
+
+async function main() {
+  const targets = await loadTargets();
+  const state = await loadState(PATHS.renderState);
+
+  // CHROMIUM_PATH lets a local run reuse an already-installed Chromium instead of
+  // downloading one. CI leaves it unset and uses the browser from `playwright install`.
+  const browser = await chromium.launch(
+    process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}
+  );
+  const context = await browser.newContext({
+    userAgent: USER_AGENT,
+    viewport: { width: 1366, height: 900 },
+    locale: 'en-GB',
+  });
+
+  // The availability tier runs first in the same job, so its state is current.
+  // A host it already reported down must not be alerted a second time here —
+  // frameless.london-tickets.uk has no DNS record and would otherwise produce
+  // two messages for one incident.
+  const availability = await loadState(PATHS.state);
+  const alreadyDown = new Set(
+    Object.entries(availability.hosts ?? {})
+      .filter(([, host]) => host.down)
+      .map(([name]) => name)
+  );
+
+  const pending = targets.filter((target) => {
+    if (alreadyDown.has(target.host)) {
+      console.log(`  SKIP ${target.host.padEnd(48)} уже отмечен упавшим на уровне доступности`);
+      return false;
+    }
+    return true;
+  });
+
+  async function checkOne(target) {
+    let result;
+    // Retry once immediately. Rendering is noisier than a status code, and a
+    // single retry keeps first-run alerting honest without an hour's delay.
+    for (let attempt = 1; attempt <= CONFIG.retriesWithinRun; attempt += 1) {
+      const page = await context.newPage();
+      result = await renderCheck(page, target.host);
+      await page.close();
+      if (result.ok) break;
+      if (attempt < CONFIG.retriesWithinRun) await new Promise((r) => setTimeout(r, CONFIG.retryDelayMs));
+      else result.reason = `${result.reason} (${attempt} попытки)`;
+    }
+    result.traffic = target.traffic;
+    const flag = result.ok ? 'OK  ' : 'FAIL';
+    console.log(`  ${flag} ${result.host.padEnd(48)} ${result.ok ? result.note ?? `"${result.title}"` : result.reason}`);
+    return result;
+  }
+
+  // Bounded worker pool. Each worker owns one page at a time, so peak memory
+  // stays at renderConcurrency tabs regardless of fleet size.
+  const queue = [...pending];
+  const results = [];
+  await Promise.all(
+    Array.from({ length: Math.min(CONFIG.renderConcurrency, queue.length) }, async () => {
+      while (queue.length > 0) {
+        results.push(await checkOne(queue.shift()));
+      }
+    })
+  );
+
+  await context.close();
+  await browser.close();
+
+  const alerts = [];
+  for (const result of results) {
+    const host = state.hosts[result.host] ?? emptyHostState();
+    if (result.ok) {
+      host.fails = 0;
+      host.down = false;
+      host.downSince = null;
+      host.lastAlertAt = null;
+    } else {
+      host.fails += 1;
+      // An empty catalogue on a satellite with no recent traffic means the event
+      // is over, which is the expected state — record it, but do not page.
+      const staleEmptyCatalogue =
+        result.emptyCatalogue && result.traffic !== 'high';
+      if (staleEmptyCatalogue) {
+        console.log(
+          `  note ${result.host}: пустой каталог, но трафик низкий — ивент прошёл, не алертим`
+        );
+      } else if (!host.down) {
+        // Fire once on the transition into broken. No repeats while it stays broken.
+        host.down = true;
+        host.downSince = new Date().toISOString();
+        host.lastAlertAt = new Date().toISOString();
+        alerts.push(result);
+      }
+    }
+    state.hosts[result.host] = host;
+  }
+
+  const okCount = results.filter((r) => r.ok).length;
+  console.log(`\nrender: ${okCount}/${results.length} ok`);
+
+  if (alerts.length > 0) {
+    const message = formatRenderAlert(alerts);
+    if (DRY_RUN) console.log(`\n--- would send ---\n${message}`);
+    else await sendTelegram(message);
+  }
+
+  await saveState(PATHS.renderState, state);
+  process.exit(0);
+}
+
+main().catch((err) => {
+  console.error(`[render] fatal: ${err.message}`);
+  process.exit(1);
+});
