@@ -1,13 +1,20 @@
 {
  "hosts": {
-  "laperle.platinumlist.net": {
+  "dubaicomedyfestival.platinumlist.net": {
    "fails": 0,
    "down": false,
    "downSince": null,
    "lastAlertAt": null,
    "lastSslAlertAt": null
   },
-  "sportsparkoman.com": {
+  "esports-world-cup.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null
+  },
+  "www.beattheheatdxb.ae": {
    "fails": 0,
    "down": false,
    "downSince": null,
@@ -28,14 +35,21 @@
    "lastAlertAt": null,
    "lastSslAlertAt": null
   },
-  "dubaicomedyfestival.platinumlist.net": {
+  "sportsparkoman.com": {
    "fails": 0,
    "down": false,
    "downSince": null,
    "lastAlertAt": null,
    "lastSslAlertAt": null
   },
-  "www.beattheheatdxb.ae": {
+  "laperle.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null
+  },
+  "ibiza-tickets.co": {
    "fails": 0,
    "down": false,
    "downSince": null,
@@ -50,26 +64,12 @@
    "lastSslAlertAt": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "esports-world-cup.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "ibiza-tickets.co": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-08-07T01:09:06.717Z",
+   "lastAlertAt": "2026-08-07T01:09:06.717Z",
    "lastSslAlertAt": null
   }
  },
- "updatedAt": "2026-08-07T01:07:55.934Z"
+ "updatedAt": "2026-08-07T01:09:06.717Z"
 }
