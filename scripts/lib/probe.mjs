@@ -1,6 +1,6 @@
 import dns from 'node:dns/promises';
 import tls from 'node:tls';
-import { CONFIG, FAILURE_SIGNATURES, USER_AGENT } from './config.mjs';
+import { CONFIG, HARD_FAILURE_SIGNATURES, USER_AGENT } from './config.mjs';
 
 /**
  * Public resolvers queried alongside the runner's own. A nameserver
@@ -62,7 +62,7 @@ export async function checkDns(host) {
     return { ok: false, addresses: [], code, partial: false };
   }
 
-  if (missing.length > 0) {
+  if (missing.length >= CONFIG.resolversMissingForFault) {
     return {
       ok: false,
       addresses: ok[0].addresses,
@@ -73,7 +73,14 @@ export async function checkDns(host) {
     };
   }
 
-  return { ok: true, addresses: ok[0].addresses, partial: false, degraded: errored.map((r) => r.name) };
+  return {
+    ok: true,
+    addresses: ok[0].addresses,
+    partial: false,
+    degraded: errored.map((r) => r.name),
+    // One resolver disagreeing is usually its own blocklist, not our DNS.
+    singleResolverMiss: missing.length === 1 ? missing[0].name : null,
+  };
 }
 
 /** Read the peer certificate and report days until expiry. */
@@ -132,12 +139,16 @@ export async function checkHttp(host, probePath) {
     const ms = Date.now() - started;
     const body = (await res.text()).slice(0, 20000);
     const lower = body.toLowerCase();
-    const signature = FAILURE_SIGNATURES.find((s) => lower.includes(s));
+    const signature = HARD_FAILURE_SIGNATURES.find((s) => lower.includes(s));
 
     if (res.status >= 500) return { ok: false, status: res.status, ms, reason: `HTTP ${res.status}` };
     if (res.status >= 400) return { ok: false, status: res.status, ms, reason: `HTTP ${res.status}` };
     if (signature) return { ok: false, status: res.status, ms, reason: `страница содержит "${signature}"` };
-    if (body.trim().length === 0) return { ok: false, status: res.status, ms, reason: 'пустой ответ' };
+    // An empty robots.txt is valid, so emptiness only condemns paths that must
+    // return content.
+    if (body.trim().length === 0 && !probePath.endsWith('robots.txt')) {
+      return { ok: false, status: res.status, ms, reason: 'пустой ответ' };
+    }
 
     // A satellite whose Queue-it redirect leaked into a non-HTML probe means
     // the probe path is wrong, not that the site is down. Surface it as a config warning.

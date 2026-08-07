@@ -31,10 +31,6 @@ export const CONFIG = {
    */
   retriesWithinRun: 2,
   retryDelayMs: 4000,
-  /**
-   * Reminder alerts while a host stays down. Disabled — one alert per incident.
-   */
-  remindWhileDown: false,
   /** Send a single message when a host comes back. Set false to go fully silent on recovery. */
   notifyOnRecovery: true,
   /** Per-request timeout, milliseconds. */
@@ -52,10 +48,15 @@ export const CONFIG = {
   /**
    * An empty catalogue only pages for hosts banded "high" in targets.json.
    * On a satellite whose event has finished, showing nothing to buy is correct
-   * behaviour rather than an incident. The band is computed at refresh time so
-   * that raw session counts never land in this public repository.
+   * behaviour rather than an incident. Set true to page on those too.
    */
   alertEmptyCatalogueOnLowTraffic: false,
+  /**
+   * How many resolvers must independently fail to find a host before that
+   * counts as a DNS fault. One is too trigger-happy: a single public resolver
+   * can NXDOMAIN a perfectly good domain because of its own threat blocklist.
+   */
+  resolversMissingForFault: 2,
   /**
    * Pages rendered concurrently.
    *
@@ -86,8 +87,15 @@ export const EMPTY_CATALOGUE_SIGNATURES = [
   'no events found',
 ];
 
-/** Substrings that mean "HTTP 200 but the site is actually broken". */
-export const FAILURE_SIGNATURES = [
+/**
+ * Substrings that mean "HTTP 200 but the site is actually broken".
+ *
+ * Deliberately does NOT include the empty-catalogue phrases. Those describe a
+ * working site with nothing on sale, which is a render-tier judgement needing
+ * the traffic band — the availability tier has no way to tell "event finished"
+ * from "outage" and would fire a hard SITE DOWN for healthy sites.
+ */
+export const HARD_FAILURE_SIGNATURES = [
   'error establishing a database connection',
   'there has been a critical error on this website',
   '502 bad gateway',
@@ -100,8 +108,10 @@ export const FAILURE_SIGNATURES = [
   'buy this domain',
   'nginx error',
   'application error',
-  ...EMPTY_CATALOGUE_SIGNATURES,
 ];
+
+/** Everything the render tier treats as a failed page. */
+export const FAILURE_SIGNATURES = [...HARD_FAILURE_SIGNATURES, ...EMPTY_CATALOGUE_SIGNATURES];
 
 export async function loadTargets() {
   const raw = JSON.parse(await readFile(PATHS.targets, 'utf8'));

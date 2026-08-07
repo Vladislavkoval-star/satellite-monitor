@@ -57,7 +57,7 @@ Render concurrency is deliberately low. A CI runner has two cores, and five conc
 A nameserver misconfiguration often breaks resolution for only part of the internet. Asking one resolver tells you nothing about whether customers can reach the site, so every host is resolved through the runner's own resolver plus Cloudflare, Google and Quad9.
 
 - No resolver finds it → the domain is dead.
-- Some find it, some return NXDOMAIN/NODATA → **alerted as a partial DNS failure**, naming which resolvers work and which do not. This is the nastier outage: the site is up for part of the world and invisible to the rest, and nobody notices because it looks fine from the office.
+- Two or more return NXDOMAIN/NODATA while others succeed → **alerted as a partial DNS failure**, naming which resolvers work and which do not. One dissenting resolver is logged but not alerted, because a single public resolver can blocklist a healthy domain on its own. This is the nastier outage: the site is up for part of the world and invisible to the rest, and nobody notices because it looks fine from the office.
 - A resolver times out or refuses → treated as noise and ignored, unless every resolver does. A rate-limited public resolver cannot raise a false alarm on its own.
 
 ## Dead man's switch

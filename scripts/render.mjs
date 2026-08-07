@@ -18,8 +18,8 @@ import {
   USER_AGENT,
   loadTargets,
 } from './lib/config.mjs';
-import { emptyHostState, loadState, saveState } from './lib/state.mjs';
-import { formatRenderAlert, sendTelegram } from './lib/notify.mjs';
+import { emptyHostState, humaniseDuration, loadState, saveState } from './lib/state.mjs';
+import { formatRecoveryAlert, formatRenderAlert, sendTelegram } from './lib/notify.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const NAV_TIMEOUT_MS = CONFIG.renderNavTimeoutMs;
@@ -117,6 +117,7 @@ async function renderCheck(page, host) {
 async function main() {
   const targets = await loadTargets();
   const state = await loadState(PATHS.renderState);
+  if (!state.hosts) state.hosts = {};
 
   // CHROMIUM_PATH lets a local run reuse an already-installed Chromium instead of
   // downloading one. CI leaves it unset and uses the browser from `playwright install`.
@@ -152,12 +153,13 @@ async function main() {
     let result;
     // Retry once immediately. Rendering is noisier than a status code, and a
     // single retry keeps first-run alerting honest without an hour's delay.
-    for (let attempt = 1; attempt <= CONFIG.retriesWithinRun; attempt += 1) {
+    const attempts = Math.max(1, CONFIG.retriesWithinRun);
+    for (let attempt = 1; attempt <= attempts; attempt += 1) {
       const page = await context.newPage();
       result = await renderCheck(page, target.host);
       await page.close();
       if (result.ok) break;
-      if (attempt < CONFIG.retriesWithinRun) await new Promise((r) => setTimeout(r, CONFIG.retryDelayMs));
+      if (attempt < attempts) await new Promise((r) => setTimeout(r, CONFIG.retryDelayMs));
       else result.reason = `${result.reason} (${attempt} попытки)`;
     }
     result.traffic = target.traffic;
@@ -178,8 +180,17 @@ async function main() {
     })
   );
 
-  await context.close();
-  await browser.close();
+  // Teardown before the alert computation would mean a crashed tab throws away
+  // every finding in the run, so it happens after, and failures there are not
+  // allowed to lose results either.
+  const closeBrowser = async () => {
+    try {
+      await context.close();
+      await browser.close();
+    } catch (err) {
+      console.error(`[render] teardown: ${err.name}`);
+    }
+  };
 
   const alerts = [];
   for (const result of results) {
@@ -213,14 +224,35 @@ async function main() {
   const okCount = results.filter((r) => r.ok).length;
   console.log(`\nrender: ${okCount}/${results.length} ok`);
 
-  if (alerts.length > 0) {
-    const message = formatRenderAlert(alerts);
-    if (DRY_RUN) console.log(`\n--- would send ---\n${message}`);
-    else await sendTelegram(message);
+  if (DRY_RUN) {
+    const preview = [];
+    if (alerts.length) preview.push(formatRenderAlert(alerts));
+    if (recovered.length) preview.push(formatRecoveryAlert(recovered));
+    console.log(preview.length ? `\n--- would send ---\n${preview.join('\n\n')}` : '\nno alerts');
+    for (const r of alerts) markDown(state, r.host);
+  } else {
+    // Only record the incident as reported once Telegram accepted it, otherwise
+    // one rate-limited send would bury the outage until it recovers.
+    if (alerts.length > 0) {
+      const delivered = await sendTelegram(formatRenderAlert(alerts));
+      if (delivered) for (const r of alerts) markDown(state, r.host);
+      else console.error('[render] alert not delivered — состояние не помечено, повторим в следующем прогоне');
+    }
+    if (recovered.length > 0) await sendTelegram(formatRecoveryAlert(recovered));
   }
 
   await saveState(PATHS.renderState, state);
+  await closeBrowser();
   process.exit(0);
+}
+
+function markDown(state, hostname) {
+  const host = state.hosts[hostname] ?? emptyHostState();
+  const now = new Date().toISOString();
+  host.down = true;
+  host.downSince = host.downSince ?? now;
+  host.lastAlertAt = now;
+  state.hosts[hostname] = host;
 }
 
 main().catch((err) => {

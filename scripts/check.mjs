@@ -1,11 +1,11 @@
 /**
- * Availability tier. Runs hourly.
+ * Availability tier.
  *
- * Checks DNS, HTTP (via a Queue-it-free probe path per host) and TLS expiry.
- * Alerts to Telegram on the FIRST failing run — blips are absorbed by immediate
- * retries inside the run, not by waiting for the next tick. One alert per
- * incident: while a host stays down nothing further is sent, and a single
- * recovery message closes it out.
+ * Checks DNS (through several resolvers), HTTP via a queue-free probe path per
+ * host, and TLS expiry. Alerts to Telegram on the FIRST failing run — blips are
+ * absorbed by immediate retries inside the run, not by waiting for the next
+ * tick. One alert per incident: while a host stays down nothing further is
+ * sent, and a single recovery message closes it out.
  */
 import { CONFIG, PATHS, loadTargets } from './lib/config.mjs';
 import { probeAll } from './lib/probe.mjs';
@@ -28,9 +28,22 @@ const DRY_RUN = process.argv.includes('--dry-run');
 async function main() {
   const targets = await loadTargets();
   const state = await loadState(PATHS.state);
+  if (!state.hosts) state.hosts = {};
+
+  // The render tier may already have alerted on a host this cycle. Reading its
+  // state makes deduplication work in both directions — without this, a host
+  // that fails render first and HTTP second produces two messages for one
+  // incident.
+  const renderState = await loadState(PATHS.renderState);
+  const renderAlreadyDown = new Set(
+    Object.entries(renderState.hosts ?? {})
+      .filter(([, host]) => host.down)
+      .map(([name]) => name)
+  );
+
   const results = await probeAll(targets);
 
-  const newlyDown = [];
+  const pendingDown = [];
   const recovered = [];
   const sslWarnings = [];
 
@@ -47,13 +60,16 @@ async function main() {
       host.lastAlertAt = null;
     } else {
       host.fails += 1;
-      // Fire once, on the transition into "down". Staying down sends nothing
-      // more, which is what keeps the channel free of duplicates.
       if (!host.down && host.fails >= CONFIG.failuresBeforeAlert) {
-        host.down = true;
-        host.downSince = new Date().toISOString();
-        host.lastAlertAt = new Date().toISOString();
-        newlyDown.push(result);
+        if (renderAlreadyDown.has(result.host)) {
+          // Same incident, already reported by the other tier.
+          console.log(`  dedup ${result.host}: рендер уже сообщил об этом инциденте`);
+          host.down = true;
+          host.downSince = new Date().toISOString();
+          host.lastAlertAt = new Date().toISOString();
+        } else {
+          pendingDown.push(result);
+        }
       }
     }
 
@@ -68,26 +84,50 @@ async function main() {
     state.hosts[result.host] = host;
   }
 
+  // Hosts that have left targets.json must not keep a stale `down: true`, or
+  // they would be permanently muted if they are ever monitored again.
+  const monitored = new Set(targets.map((t) => t.host));
+  for (const name of Object.keys(state.hosts)) {
+    if (!monitored.has(name)) {
+      delete state.hosts[name];
+      console.log(`  prune ${name}: больше не в списке целей, состояние удалено`);
+    }
+  }
+
   const okCount = results.filter((r) => r.ok).length;
-  const stillDown = results.filter((r) => !r.ok).length - newlyDown.length;
   console.log(
-    `checked ${results.length} hosts · ok ${okCount} · new failures ${newlyDown.length} · already known down ${Math.max(0, stillDown)}`
+    `checked ${results.length} hosts · ok ${okCount} · new failures ${pendingDown.length}`
   );
   for (const r of results) {
     const flag = r.ok ? 'OK  ' : 'FAIL';
     const extra = r.ok ? `${r.status} ${r.ms}ms` : r.reason;
     console.log(`  ${flag} ${r.host.padEnd(48)} ${extra}${r.warn ? ` [warn: ${r.warn}]` : ''}`);
+    if (r.singleResolverMiss) {
+      console.log(`       note: ${r.singleResolverMiss} не находит домен — вероятно его блоклист, не наш DNS`);
+    }
   }
 
-  const messages = [];
-  if (newlyDown.length > 0) messages.push(formatDownAlert(newlyDown));
-  if (recovered.length > 0) messages.push(formatRecoveryAlert(recovered));
-  if (sslWarnings.length > 0) messages.push(formatSslAlert(sslWarnings));
-
   if (DRY_RUN) {
-    console.log(messages.length ? `\n--- would send ---\n${messages.join('\n\n')}` : '\nno alerts');
+    const preview = [];
+    if (pendingDown.length) preview.push(formatDownAlert(pendingDown));
+    if (recovered.length) preview.push(formatRecoveryAlert(recovered));
+    if (sslWarnings.length) preview.push(formatSslAlert(sslWarnings));
+    console.log(preview.length ? `\n--- would send ---\n${preview.join('\n\n')}` : '\nno alerts');
+    for (const r of pendingDown) markDown(state, r.host);
   } else {
-    for (const message of messages) await sendTelegram(message);
+    // A host is only recorded as "reported" once Telegram has actually accepted
+    // the message. Marking it first would mean a single 429 silently swallows
+    // the incident forever, because nothing re-alerts a host already down.
+    if (pendingDown.length > 0) {
+      const delivered = await sendTelegram(formatDownAlert(pendingDown));
+      if (delivered) {
+        for (const r of pendingDown) markDown(state, r.host);
+      } else {
+        console.error('[check] alert not delivered — состояние не помечено, повторим в следующем прогоне');
+      }
+    }
+    if (recovered.length > 0) await sendTelegram(formatRecoveryAlert(recovered));
+    if (sslWarnings.length > 0) await sendTelegram(formatSslAlert(sslWarnings));
   }
 
   await saveState(PATHS.state, state);
@@ -95,6 +135,15 @@ async function main() {
   // A failing host is a monitoring signal, not a workflow failure — exit 0 so
   // the schedule stays green and the next tick still fires.
   process.exit(0);
+}
+
+function markDown(state, hostname) {
+  const host = state.hosts[hostname] ?? emptyHostState();
+  const now = new Date().toISOString();
+  host.down = true;
+  host.downSince = host.downSince ?? now;
+  host.lastAlertAt = now;
+  state.hosts[hostname] = host;
 }
 
 main().catch((err) => {
