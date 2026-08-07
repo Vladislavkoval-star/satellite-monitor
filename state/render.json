@@ -64,12 +64,12 @@
    "lastSslAlertAt": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 3,
+   "fails": 4,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
    "lastSslAlertAt": null
   }
  },
- "updatedAt": "2026-08-07T05:44:18.927Z"
+ "updatedAt": "2026-08-07T07:23:35.065Z"
 }
