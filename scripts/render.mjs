@@ -193,32 +193,48 @@ async function main() {
   };
 
   const alerts = [];
+  const recovered = [];
   for (const result of results) {
     const host = state.hosts[result.host] ?? emptyHostState();
-    if (result.ok) {
+
+    // An empty catalogue on a low-traffic host means the event is over, which is
+    // the expected state rather than an incident. It counts as healthy so the
+    // host cannot get wedged into a permanent `down: true` and end up muted the
+    // next time it genuinely breaks.
+    const staleEmptyCatalogue =
+      !result.ok &&
+      result.emptyCatalogue &&
+      result.traffic !== 'high' &&
+      !CONFIG.alertEmptyCatalogueOnLowTraffic;
+
+    if (staleEmptyCatalogue) {
+      console.log(`  note ${result.host}: пустой каталог, но трафик низкий — ивент прошёл, не алертим`);
+    }
+
+    if (result.ok || staleEmptyCatalogue) {
+      if (host.down && CONFIG.notifyOnRecovery) {
+        recovered.push({ host: result.host, downFor: humaniseDuration(host.downSince) });
+      }
       host.fails = 0;
       host.down = false;
       host.downSince = null;
       host.lastAlertAt = null;
     } else {
       host.fails += 1;
-      // An empty catalogue on a satellite with no recent traffic means the event
-      // is over, which is the expected state — record it, but do not page.
-      const staleEmptyCatalogue =
-        result.emptyCatalogue && result.traffic !== 'high';
-      if (staleEmptyCatalogue) {
-        console.log(
-          `  note ${result.host}: пустой каталог, но трафик низкий — ивент прошёл, не алертим`
-        );
-      } else if (!host.down) {
-        // Fire once on the transition into broken. No repeats while it stays broken.
-        host.down = true;
-        host.downSince = new Date().toISOString();
-        host.lastAlertAt = new Date().toISOString();
-        alerts.push(result);
-      }
+      // Queued for alerting; `down` is only set once Telegram confirms delivery.
+      if (!host.down && host.fails >= CONFIG.failuresBeforeAlert) alerts.push(result);
     }
     state.hosts[result.host] = host;
+  }
+
+  // Drop state for hosts that have left targets.json; a stale `down: true` would
+  // permanently mute them if they were ever monitored again.
+  const monitored = new Set(targets.map((t) => t.host));
+  for (const name of Object.keys(state.hosts)) {
+    if (!monitored.has(name)) {
+      delete state.hosts[name];
+      console.log(`  prune ${name}: больше не в списке целей, состояние удалено`);
+    }
   }
 
   const okCount = results.filter((r) => r.ok).length;
