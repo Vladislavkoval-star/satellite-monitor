@@ -8,10 +8,10 @@
    "lastSslAlertAt": null
   },
   "sportsparkoman.com": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-08T17:50:55.869Z",
-   "lastAlertAt": "2026-08-08T17:50:55.869Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null
   },
   "aseer-experiences.platinumlist.net": {
@@ -36,17 +36,17 @@
    "lastSslAlertAt": null
   },
   "www.beattheheatdxb.ae": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-08T17:50:55.869Z",
-   "lastAlertAt": "2026-08-08T17:50:55.869Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null
   },
   "london-tickets.uk": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-08T17:50:55.869Z",
-   "lastAlertAt": "2026-08-08T17:50:55.869Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null
   },
   "tickets.expocitydubai.com": {
@@ -64,10 +64,10 @@
    "lastSslAlertAt": null
   },
   "ibiza-tickets.co": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-08T17:50:55.869Z",
-   "lastAlertAt": "2026-08-08T17:50:55.869Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null
   },
   "museumofillusions.platinumlist.net": {
@@ -106,10 +106,10 @@
    "lastSslAlertAt": null
   },
   "london-musicals.uk": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-08T17:50:55.869Z",
-   "lastAlertAt": "2026-08-08T17:50:55.869Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null
   },
   "concert.ibiza-tickets.co": {
@@ -120,17 +120,17 @@
    "lastSslAlertAt": null
   },
   "barcelona-tickets.co": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-08T17:50:55.869Z",
-   "lastAlertAt": "2026-08-08T17:50:55.869Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null
   },
   "www.spotlightlive.ae": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-08T17:50:55.869Z",
-   "lastAlertAt": "2026-08-08T17:50:55.869Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null
   },
   "platinumlist.londontheatredirect.com": {
@@ -141,5 +141,5 @@
    "lastSslAlertAt": null
   }
  },
- "updatedAt": "2026-08-08T17:50:55.869Z"
+ "updatedAt": "2026-08-08T18:15:30.024Z"
 }
