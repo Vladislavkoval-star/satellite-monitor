@@ -188,7 +188,41 @@ Share-threshold suppression, now render-tier only:
 
 The control endpoints must stay unrelated to the monitored fleet. Anything sharing a CDN or a registrar with the sites would fail alongside a real outage and suppress it.
 
-Nothing credential-shaped is committed. The Telegram helper deliberately never logs an API response body, because the request path contains the bot token.
+Nothing credential-shaped is committed. The Telegram helper deliberately never logs an API response body, because the request path contains the bot token. Workflow logs are public on a public repository, so anything printed is published.
+
+### Supply chain
+
+The Python job holds the GA4 credential in its environment, which makes whatever it installs a path to the analytics property. `requirements.txt` is a fully resolved lock with hashes for every package, direct and transitive, installed with `--require-hashes` — a swapped release fails the job instead of running. Regenerate it after changing `requirements.in`:
+
+```
+uv pip compile --generate-hashes --python-version 3.11 --output-file requirements.txt requirements.in
+```
+
+CI installs the same lock on every pull request, so a hash that no longer resolves surfaces there rather than in the Monday run. The Node side already worked this way: `npm ci` against the lockfile, and every third-party action pinned to a commit SHA rather than a tag.
+
+### Moving GA4 off a static key
+
+`GA4_SERVICE_ACCOUNT_JSON` is a long-lived Google credential sitting in repository secrets. Workload identity federation replaces it with an OIDC exchange: GitHub mints a short-lived token, Google trades it for credentials scoped to this repository, and no key exists to leak. `scripts/refresh_targets.py` already prefers it and falls back to the JSON key, so the switch is configuration, not code.
+
+On the Google side, once:
+
+```
+gcloud iam workload-identity-pools create github --location=global
+
+gcloud iam workload-identity-pools providers create-oidc github \
+  --location=global --workload-identity-pool=github \
+  --issuer-uri=https://token.actions.githubusercontent.com \
+  --attribute-mapping=google.subject=assertion.sub,attribute.repository=assertion.repository \
+  --attribute-condition="assertion.repository=='Vladislavkoval-star/satellite-monitor'"
+
+gcloud iam service-accounts add-iam-policy-binding GA4_SERVICE_ACCOUNT_EMAIL \
+  --role=roles/iam.workloadIdentityUser \
+  --member="principalSet://iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github/attribute.repository/Vladislavkoval-star/satellite-monitor"
+```
+
+The attribute condition is the part that matters: without it any repository on GitHub can present a token to this pool.
+
+Then set the repository variables `GA4_WORKLOAD_IDENTITY_PROVIDER` and `GA4_SERVICE_ACCOUNT_EMAIL`. The auth step activates on their presence and the JSON secret stops being passed on the same run. Once a run is green, delete the `GA4_SERVICE_ACCOUNT_JSON` secret and the key itself in Google IAM — a key that still exists is still a key that can leak.
 
 ## Local development
 

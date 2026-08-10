@@ -1,0 +1,11 @@
+# Direct dependency only. requirements.txt beside it is the fully resolved,
+# hash-pinned lock actually installed in CI — regenerate it with:
+#
+#   uv pip compile --generate-hashes --python-version 3.11 \
+#     --output-file requirements.txt requirements.in
+#
+# Pinning matters more here than in most jobs: the step that installs these
+# holds the GA4 credential in its environment, so any package resolved at
+# install time — direct or transitive — runs with read access to the analytics
+# property. --require-hashes makes a swapped release fail the job instead.
+google-analytics-data

@@ -8,6 +8,10 @@ on:
 
 permissions:
   contents: write
+  # Required to mint the OIDC token that workload identity federation exchanges
+  # for a short-lived Google credential. Harmless while the JSON key is still in
+  # use — no token is requested unless the auth step below runs.
+  id-token: write
 
 jobs:
   refresh:
@@ -20,12 +24,27 @@ jobs:
         with:
           python-version: '3.11'
 
+      # Hash-pinned. This step's successor holds the GA4 credential, so a
+      # dependency resolved at install time — direct or transitive — would run
+      # with read access to the analytics property. --require-hashes turns a
+      # swapped release into a failed job instead of a silent compromise.
       - name: Install dependencies
-        run: pip install --quiet google-analytics-data
+        run: pip install --require-hashes --quiet -r requirements.txt
+
+      # Keyless auth, once the federation exists on the Google side. Until then
+      # the step is skipped and the static key below is used instead.
+      - name: Authenticate to Google (workload identity federation)
+        if: vars.GA4_WORKLOAD_IDENTITY_PROVIDER != ''
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ vars.GA4_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GA4_SERVICE_ACCOUNT_EMAIL }}
 
       - name: Rebuild targets from GA4
         env:
-          GA4_SERVICE_ACCOUNT_JSON: ${{ secrets.GA4_SERVICE_ACCOUNT_JSON }}
+          # Empty once the federation is configured, at which point the script
+          # falls through to the credential the auth step left on disk.
+          GA4_SERVICE_ACCOUNT_JSON: ${{ vars.GA4_WORKLOAD_IDENTITY_PROVIDER == '' && secrets.GA4_SERVICE_ACCOUNT_JSON || '' }}
           GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
           EXCLUDED_HOSTS: ${{ vars.EXCLUDED_HOSTS }}
           TOP_N_PER_TYPE: ${{ vars.TOP_N_PER_TYPE || '5' }}
