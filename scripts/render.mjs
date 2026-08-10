@@ -19,6 +19,7 @@ import {
   loadTargets,
 } from './lib/config.mjs';
 import { emptyHostState, humaniseDuration, loadState, saveState } from './lib/state.mjs';
+import { assessTransportStorm } from './lib/storm.mjs';
 import { formatRecoveryAlert, formatRenderAlert, sendTelegram } from './lib/notify.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
@@ -69,7 +70,7 @@ async function renderCheck(page, host) {
 
     const status = response?.status() ?? null;
     if (status && status >= 400) {
-      return { host, ok: false, reason: `HTTP ${status} при рендере` };
+      return { host, ok: false, reason: `HTTP ${status} при рендере`, failureKind: 'http' };
     }
 
     const title = (await page.title()).trim();
@@ -82,6 +83,7 @@ async function renderCheck(page, host) {
         host,
         ok: false,
         reason: `на странице "${signature}"`,
+        failureKind: 'content',
         emptyCatalogue: EMPTY_CATALOGUE_SIGNATURES.includes(signature),
       };
     }
@@ -93,24 +95,38 @@ async function renderCheck(page, host) {
     // applies to storefronts only.
     const isCheckoutApp = /^(buy|checkout)\./.test(host);
     if (!isCheckoutApp && title.length === 0) {
-      return { host, ok: false, reason: 'пустой <title>' };
+      return { host, ok: false, reason: 'пустой <title>', failureKind: 'content' };
     }
     if (text.length < CONFIG.minRenderedTextLength) {
-      return { host, ok: false, reason: `почти пустая страница (${text.length} символов текста)` };
+      return {
+        host,
+        ok: false,
+        reason: `почти пустая страница (${text.length} символов текста)`,
+        failureKind: 'content',
+      };
     }
 
     const affordance = await hasPurchaseAffordance(page, text);
     if (!affordance) {
-      return { host, ok: false, reason: 'нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты' };
+      return {
+        host,
+        ok: false,
+        reason: 'нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты',
+        failureKind: 'content',
+      };
     }
 
     return { host, ok: true, title, textLength: text.length, affordance };
   } catch (err) {
+    // Navigation never completed, so nothing about the page was observed. On a
+    // two-core runner this is also what tab starvation and an egress stall look
+    // like, which is why it is transport-class and eligible for storm
+    // suppression rather than an immediate alert.
     const reason =
       err.name === 'TimeoutError'
         ? `не отрисовалась за ${NAV_TIMEOUT_MS / 1000}с`
         : `ошибка браузера: ${String(err.message).split('\n')[0].slice(0, 120)}`;
-    return { host, ok: false, reason };
+    return { host, ok: false, reason, failureKind: 'transport' };
   }
 }
 
@@ -164,7 +180,10 @@ async function main() {
     }
     result.traffic = target.traffic;
     const flag = result.ok ? 'OK  ' : 'FAIL';
-    console.log(`  ${flag} ${result.host.padEnd(48)} ${result.ok ? result.note ?? `"${result.title}"` : result.reason}`);
+    console.log(
+      `  ${flag} ${result.host.padEnd(48)} ` +
+        `${result.ok ? result.note ?? `"${result.title}"` : `${result.reason} [${result.failureKind}]`}`
+    );
     return result;
   }
 
@@ -191,6 +210,23 @@ async function main() {
       console.error(`[render] teardown: ${err.name}`);
     }
   };
+
+  // Same guard as the availability tier. Here the shared resource is the runner
+  // itself as much as its network: the README records five concurrent tabs
+  // starving each other until nine healthy whitelabels all blew the navigation
+  // timeout at once. A timeout on most of the fleet in one run says more about
+  // this runner than about the fleet.
+  const storm = assessTransportStorm(results, {
+    minHosts: CONFIG.transportStormMinHosts,
+    ratio: CONFIG.transportStormRatio,
+    maxConsecutiveRuns: CONFIG.transportStormMaxConsecutiveRuns,
+    previous: state.transportStorm,
+  });
+  const suppressedHosts = new Set(storm.suppress ? storm.hosts : []);
+  if (storm.storm) {
+    console.log(`\n${storm.suppress ? 'STORM SUPPRESSED' : 'STORM ESCALATED'}: ${storm.summary}`);
+    console.log(`  hosts: ${storm.hosts.join(', ')}`);
+  }
 
   const alerts = [];
   const recovered = [];
@@ -219,13 +255,30 @@ async function main() {
       host.down = false;
       host.downSince = null;
       host.lastAlertAt = null;
+      host.lastReason = null;
+      host.lastFailureKind = null;
+    } else if (suppressedHosts.has(result.host)) {
+      // Observation kept, judgement deferred one tick — and because `down` stays
+      // false, no phantom recovery message follows when the next run is clean.
+      host.lastReason = result.reason;
+      host.lastFailureKind = result.failureKind ?? null;
     } else {
       host.fails += 1;
+      host.lastReason = result.reason;
+      host.lastFailureKind = result.failureKind ?? null;
       // Queued for alerting; `down` is only set once Telegram confirms delivery.
       if (!host.down && host.fails >= CONFIG.failuresBeforeAlert) alerts.push(result);
     }
     state.hosts[result.host] = host;
   }
+
+  state.transportStorm = {
+    consecutive: storm.consecutive,
+    lastRunAt: new Date().toISOString(),
+    hosts: storm.storm ? storm.hosts : [],
+    suppressed: storm.suppress,
+    escalated: storm.escalated,
+  };
 
   // Drop state for hosts that have left targets.json; a stale `down: true` would
   // permanently mute them if they were ever monitored again.
