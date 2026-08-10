@@ -7,7 +7,7 @@
   "scripts": {
     "check": "node scripts/check.mjs",
     "render": "node scripts/render.mjs",
-    "lint": "node --check scripts/check.mjs && node --check scripts/render.mjs && node --check scripts/lib/storm.mjs && node --check scripts/lib/probe.mjs",
+    "lint": "node --check scripts/check.mjs && node --check scripts/render.mjs && node --check scripts/lib/storm.mjs && node --check scripts/lib/control.mjs && node --check scripts/lib/probe.mjs",
     "test": "node --test \"scripts/**/*.test.mjs\""
   },
   "engines": {
