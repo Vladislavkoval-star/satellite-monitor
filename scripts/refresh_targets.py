@@ -30,6 +30,8 @@ from google.analytics.data_v1beta.types import (
     OrderBy,
     RunReportRequest,
 )
+import google.auth
+import google.auth.exceptions
 from google.oauth2 import service_account
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -182,19 +184,51 @@ def strip_traffic_figures(target: dict) -> dict:
     return cleaned
 
 
-def main() -> int:
+GA4_SCOPES = ["https://www.googleapis.com/auth/analytics.readonly"]
+
+
+def load_credentials():
+    """
+    Prefer keyless auth, fall back to the service-account JSON.
+
+    Workload Identity Federation is the target state: the workflow exchanges
+    GitHub's OIDC token for a short-lived Google credential, so no long-lived
+    key exists to leak, and access is bound to this repository rather than to
+    whoever holds a file. google-github-actions/auth leaves an external-account
+    credential on disk and points GOOGLE_APPLICATION_CREDENTIALS at it, which
+    google.auth.default() picks up with no code change.
+
+    The JSON path stays as a fallback so the Monday run keeps working until the
+    federation is configured on the Google side. Delete this branch — and the
+    secret — once GA4_WORKLOAD_IDENTITY_PROVIDER is set.
+    """
     raw_credentials = os.environ.get("GA4_SERVICE_ACCOUNT_JSON")
-    if not raw_credentials:
-        print("Missing required environment variable: GA4_SERVICE_ACCOUNT_JSON", file=sys.stderr)
-        return 1
+    if raw_credentials:
+        print("auth: static service-account key (consider migrating to OIDC)", file=sys.stderr)
+        return service_account.Credentials.from_service_account_info(
+            json.loads(raw_credentials), scopes=GA4_SCOPES
+        )
+
+    credentials, _ = google.auth.default(scopes=GA4_SCOPES)
+    print("auth: workload identity federation (no static key)", file=sys.stderr)
+    return credentials
+
+
+def main() -> int:
     if not GA4_PROPERTY_ID:
         print("Missing required environment variable: GA4_PROPERTY_ID", file=sys.stderr)
         return 1
 
-    credentials = service_account.Credentials.from_service_account_info(
-        json.loads(raw_credentials),
-        scopes=["https://www.googleapis.com/auth/analytics.readonly"],
-    )
+    try:
+        credentials = load_credentials()
+    except google.auth.exceptions.DefaultCredentialsError:
+        print(
+            "No Google credentials. Set GA4_SERVICE_ACCOUNT_JSON, or configure "
+            "workload identity federation and let the auth step provide them.",
+            file=sys.stderr,
+        )
+        return 1
+
     client = BetaAnalyticsDataClient(credentials=credentials)
 
     sessions_30d = fetch_sessions(client, 30)
