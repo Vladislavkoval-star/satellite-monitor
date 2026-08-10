@@ -50,20 +50,16 @@ export const CONFIG = {
    */
   transportRetryDelayMs: 12000,
   /**
-   * Transport-storm suppression.
+   * Transport-storm suppression — render tier only.
    *
-   * A CI runner shares one egress path with every probe in the run. When that
-   * path stalls, every host fails at the same instant with the same connect
-   * error — which is indistinguishable, per host, from the sites being down.
-   * On 2026-08-08 seven independent whitelabels on four different hosting
-   * providers all went "down" inside the same millisecond with
-   * UND_ERR_CONNECT_TIMEOUT and "recovered" on the next tick: no outage
-   * happened, the runner's network hiccuped.
-   *
-   * So a transport failure affecting a large share of the fleet at once is
-   * treated as our own network until the next run confirms it. Failures that
-   * cannot be caused by our egress — HTTP 4xx/5xx, an authoritative NXDOMAIN,
-   * an error page in the body — are never suppressed and still alert instantly.
+   * The availability tier no longer uses this: it asks the network directly via
+   * lib/control.mjs, which does not depend on how many hosts are in the fleet.
+   * The render tier keeps it because there the shared resource is the runner's
+   * CPU as much as its network — the README records five concurrent Chromium
+   * tabs starving each other until nine healthy whitelabels all blew the
+   * navigation timeout at once. A control probe cannot see that: the network is
+   * perfectly fine while the browser is starved. So the render tier suppresses
+   * on either signal — blind egress, or most of the fleet timing out together.
    */
   transportStormMinHosts: 3,
   transportStormRatio: 0.5,
@@ -76,6 +72,54 @@ export const CONFIG = {
    * genuine provider-wide outage.
    */
   transportStormMaxConsecutiveRuns: 1,
+  /**
+   * Connectivity control endpoints.
+   *
+   * Large, unrelated services used to answer one question: does this runner
+   * have a working egress path right now? Any HTTP response counts as reachable
+   * — we are testing our own network, not their health, so a 429 or a 500 from
+   * them is still proof the path works. Only when every one of them fails on
+   * transport in the same sample is the runner treated as blind.
+   *
+   * Three, on three different providers and three different networks, so no
+   * single company's bad day can mute the fleet. They must stay unrelated to the
+   * monitored sites: anything sharing a CDN or a registrar with the fleet would
+   * fail alongside a real outage and suppress it.
+   */
+  controlEndpoints: [
+    'https://www.google.com/generate_204',
+    'https://www.cloudflare.com/cdn-cgi/trace',
+    'https://api.github.com/zen',
+  ],
+  /** Per-control-request timeout. Shorter than timeoutMs: these answer in tens of ms or not at all. */
+  controlTimeoutMs: 8000,
+  /**
+   * How often the control endpoints are polled while a run is in progress.
+   *
+   * Sampling only before or after the run would miss a stall in the middle of
+   * it, which is when the fleet probes were failing. At this interval a ~60s run
+   * takes roughly seven samples, costing ~21 requests to three endpoints that
+   * are built for far more.
+   */
+  controlSampleIntervalMs: 8000,
+  /**
+   * Share of the during-run control samples that must be blind before the run
+   * counts as blind on that evidence alone.
+   *
+   * Not "any single blind sample": a run where the whole fleet is unreachable
+   * leaves enough connections hanging to starve the control probes on its own.
+   * Measured with ten dead hosts — five blind samples out of seventeen while the
+   * network was fine. A genuine outage would have suppressed itself. A real
+   * stall covers the run and shows up in nearly every sample instead.
+   *
+   * The quiet sample taken after the run overrides this in either direction.
+   */
+  controlBlindSampleRatio: 0.5,
+  /**
+   * While the runner stays blind, repeat the notice at most this often.
+   * Entering and leaving the state always sends one.
+   */
+  controlReAlertHours: 1,
   /** Warn when the TLS certificate expires within this many days. Once per host per day. */
   sslWarnDays: 14,
   /**

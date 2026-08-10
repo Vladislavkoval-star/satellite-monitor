@@ -20,6 +20,7 @@ import {
 } from './lib/config.mjs';
 import { emptyHostState, humaniseDuration, loadState, saveState } from './lib/state.mjs';
 import { assessTransportStorm } from './lib/storm.mjs';
+import { SUPPRESSIBLE_KINDS, assessBlindness, startControlSampler } from './lib/control.mjs';
 import { formatRecoveryAlert, formatRenderAlert, sendTelegram } from './lib/notify.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
@@ -189,15 +190,25 @@ async function main() {
 
   // Bounded worker pool. Each worker owns one page at a time, so peak memory
   // stays at renderConcurrency tabs regardless of fleet size.
+  //
+  // The control sampler runs alongside it, covering the same window: a stall
+  // that happened while these tabs were navigating is the one worth knowing
+  // about, and a sample taken before or after would miss it.
   const queue = [...pending];
   const results = [];
-  await Promise.all(
-    Array.from({ length: Math.min(CONFIG.renderConcurrency, queue.length) }, async () => {
-      while (queue.length > 0) {
-        results.push(await checkOne(queue.shift()));
-      }
-    })
-  );
+  const sampler = startControlSampler();
+  let samples;
+  try {
+    await Promise.all(
+      Array.from({ length: Math.min(CONFIG.renderConcurrency, queue.length) }, async () => {
+        while (queue.length > 0) {
+          results.push(await checkOne(queue.shift()));
+        }
+      })
+    );
+  } finally {
+    samples = await sampler.stop();
+  }
 
   // Teardown before the alert computation would mean a crashed tab throws away
   // every finding in the run, so it happens after, and failures there are not
@@ -211,11 +222,17 @@ async function main() {
     }
   };
 
-  // Same guard as the availability tier. Here the shared resource is the runner
-  // itself as much as its network: the README records five concurrent tabs
-  // starving each other until nine healthy whitelabels all blew the navigation
-  // timeout at once. A timeout on most of the fleet in one run says more about
-  // this runner than about the fleet.
+  // Two shared resources can break this tier at once, so it listens to both.
+  //
+  // The network is one, and lib/control.mjs answers that directly — same signal
+  // the availability tier uses.
+  //
+  // The runner itself is the other, and no control probe can see it: the README
+  // records five concurrent Chromium tabs starving each other until nine healthy
+  // whitelabels all blew the navigation timeout together, while the network was
+  // perfectly fine throughout. Only the fleet-wide view catches that, so the
+  // share threshold stays here even though the availability tier has dropped it.
+  const vision = assessBlindness(samples, state.connectivity, { now: new Date().toISOString() });
   const storm = assessTransportStorm(results, {
     minHosts: CONFIG.transportStormMinHosts,
     ratio: CONFIG.transportStormRatio,
@@ -223,8 +240,9 @@ async function main() {
     previous: state.transportStorm,
   });
   const suppressedHosts = new Set(storm.suppress ? storm.hosts : []);
+  console.log(`\ncontrol: ${vision.summary}`);
   if (storm.storm) {
-    console.log(`\n${storm.suppress ? 'STORM SUPPRESSED' : 'STORM ESCALATED'}: ${storm.summary}`);
+    console.log(`${storm.suppress ? 'STORM SUPPRESSED' : 'STORM ESCALATED'}: ${storm.summary}`);
     console.log(`  hosts: ${storm.hosts.join(', ')}`);
   }
 
@@ -257,7 +275,10 @@ async function main() {
       host.lastAlertAt = null;
       host.lastReason = null;
       host.lastFailureKind = null;
-    } else if (suppressedHosts.has(result.host)) {
+    } else if (
+      suppressedHosts.has(result.host) ||
+      (vision.blind && SUPPRESSIBLE_KINDS.has(result.failureKind))
+    ) {
       // Observation kept, judgement deferred one tick — and because `down` stays
       // false, no phantom recovery message follows when the next run is clean.
       host.lastReason = result.reason;
