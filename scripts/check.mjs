@@ -7,10 +7,13 @@
  * tick. One alert per incident: while a host stays down nothing further is
  * sent, and a single recovery message closes it out.
  *
- * The one exception to "alert on the first run" is a transport storm: when a
- * large share of the fleet fails at the same instant on connect errors alone,
- * the likeliest cause is this runner's egress rather than every site at once, so
- * the run is recorded and the judgement deferred one tick. See lib/storm.mjs.
+ * The one exception to "alert on the first run" is a blind runner. Control
+ * endpoints are polled throughout the run; if not one of them answered, this
+ * runner had no working network and its connect timeouts say nothing about the
+ * fleet. Those verdicts are deferred one tick and a МОНИТОРИНГ ОСЛЕП notice is
+ * sent instead. While the control endpoints do answer, nothing is suppressed —
+ * one host or all twenty, the alert goes out on the first failing run. See
+ * lib/control.mjs.
  */
 import { fileURLToPath } from 'node:url';
 import { CONFIG, PATHS, loadTargets } from './lib/config.mjs';
@@ -22,10 +25,12 @@ import {
   loadState,
   saveState,
 } from './lib/state.mjs';
-import { assessTransportStorm } from './lib/storm.mjs';
+import { SUPPRESSIBLE_KINDS, assessBlindness, startControlSampler } from './lib/control.mjs';
 import {
+  formatBlindAlert,
   formatDownAlert,
   formatRecoveryAlert,
+  formatSightRestoredAlert,
   formatSslAlert,
   sendTelegram,
 } from './lib/notify.mjs';
@@ -42,14 +47,19 @@ const DRY_RUN = process.argv.includes('--dry-run');
  * @param {Array<object>} args.results        probe results for this run
  * @param {object} args.state                 availability state (mutated)
  * @param {Set<string>} args.renderAlreadyDown hosts the render tier already reported
- * @param {{suppress: boolean, hosts: string[]}} args.storm storm assessment
+ * @param {{blind: boolean}} args.vision      connectivity assessment for this run
  * @param {string} args.now                   ISO timestamp for this run
  * @param {object} [args.config]
  */
-export function reconcile({ results, state, renderAlreadyDown, storm, now, config = CONFIG }) {
+export function reconcile({ results, state, renderAlreadyDown, vision, now, config = CONFIG }) {
   if (!state.hosts) state.hosts = {};
 
-  const suppressedHosts = new Set(storm.suppress ? storm.hosts : []);
+  // Blindness suppresses a kind of failure, not a list of hosts. A verdict is
+  // withheld because we could not see, which is true of every transport failure
+  // in the run regardless of how many there were — one is as untrustworthy as
+  // twenty. Everything else stands: an HTTP status or an authoritative NXDOMAIN
+  // came back over a path that, by definition, worked.
+  const blind = vision?.blind === true;
   const pendingDown = [];
   const recovered = [];
   const sslWarnings = [];
@@ -68,8 +78,8 @@ export function reconcile({ results, state, renderAlreadyDown, storm, now, confi
       host.lastAlertAt = null;
       host.lastReason = null;
       host.lastFailureKind = null;
-    } else if (suppressedHosts.has(result.host)) {
-      // Storm: the observation is real, the conclusion is not trustworthy yet.
+    } else if (blind && SUPPRESSIBLE_KINDS.has(result.failureKind)) {
+      // Blind: the observation is real, the conclusion is not trustworthy yet.
       // Record what was seen and leave fails/down untouched, so the host is
       // neither alerted now nor able to send a bogus recovery message next tick
       // (which is what produced the "лежал 25 мин" pair on 2026-08-08).
@@ -123,34 +133,45 @@ async function main() {
       .map(([name]) => name)
   );
 
-  const results = await probeAll(targets);
+  // The sampler runs for the duration of the fleet probes, so it observes the
+  // same window the failures happened in rather than a moment either side of it.
+  const sampler = startControlSampler();
+  let results;
+  let samples;
+  try {
+    results = await probeAll(targets);
+  } finally {
+    samples = await sampler.stop();
+  }
   const now = new Date().toISOString();
 
-  const storm = assessTransportStorm(results, {
-    minHosts: CONFIG.transportStormMinHosts,
-    ratio: CONFIG.transportStormRatio,
-    maxConsecutiveRuns: CONFIG.transportStormMaxConsecutiveRuns,
-    previous: state.transportStorm,
-  });
+  const vision = assessBlindness(samples, state.connectivity, { now });
 
   const { pendingDown, recovered, sslWarnings, suppressed } = reconcile({
     results,
     state,
     renderAlreadyDown,
-    storm,
+    vision,
     now,
   });
 
-  // Persisted so the audit trail shows a suppressed run as a deliberate decision
-  // rather than as a gap where nothing happened, and so the next run knows how
-  // many storming ticks came before it.
-  state.transportStorm = {
-    consecutive: storm.consecutive,
+  // Persisted so a suppressed run reads as a deliberate decision in the commit
+  // history rather than as a gap where nothing happened, and so the next run
+  // knows whether it is entering or leaving the blind state. lastAlertAt is what
+  // keeps a long outage from sending a notice every ten minutes.
+  const blindDuration = vision.restored ? humaniseDuration(state.connectivity?.since) : null;
+  state.connectivity = {
+    blind: vision.blind,
+    since: vision.since,
+    consecutive: vision.consecutive,
+    samples: vision.taken,
+    blindSamples: vision.blindSamples,
+    codes: vision.codes,
     lastRunAt: now,
-    hosts: storm.storm ? storm.hosts : [],
-    suppressed: storm.suppress,
-    escalated: storm.escalated,
+    lastAlertAt: vision.shouldAlert ? now : (state.connectivity?.lastAlertAt ?? null),
   };
+  // Written by an older version; nothing reads it any more.
+  delete state.transportStorm;
 
   // Hosts that have left targets.json must not keep a stale `down: true`, or
   // they would be permanently muted if they are ever monitored again.
@@ -175,19 +196,27 @@ async function main() {
       console.log(`       note: ${r.singleResolverMiss} не находит домен — вероятно его блоклист, не наш DNS`);
     }
   }
-  if (storm.storm) {
-    console.log(`\n${storm.suppress ? 'STORM SUPPRESSED' : 'STORM ESCALATED'}: ${storm.summary}`);
-    console.log(`  hosts: ${storm.hosts.join(', ')}`);
+  console.log(`\ncontrol: ${vision.summary}`);
+  if (vision.blind) {
+    console.log(`  BLIND — ${suppressed.length} транспортных вердиктов отложено до следующего тика`);
+    for (const r of suppressed) console.log(`    defer ${r.host}: ${r.reason}`);
   }
 
   if (DRY_RUN) {
     const preview = [];
+    if (vision.shouldAlert) preview.push(formatBlindAlert(vision));
+    if (vision.restored) preview.push(formatSightRestoredAlert({ blindFor: blindDuration }));
     if (pendingDown.length) preview.push(formatDownAlert(pendingDown));
     if (recovered.length) preview.push(formatRecoveryAlert(recovered));
     if (sslWarnings.length) preview.push(formatSslAlert(sslWarnings));
     console.log(preview.length ? `\n--- would send ---\n${preview.join('\n\n')}` : '\nno alerts');
     for (const r of pendingDown) markDown(state, r.host);
   } else {
+    // Connectivity first: when both go out in one run, "I went blind" is the
+    // context for everything under it.
+    if (vision.shouldAlert) await sendTelegram(formatBlindAlert(vision));
+    if (vision.restored) await sendTelegram(formatSightRestoredAlert({ blindFor: blindDuration }));
+
     // A host is only recorded as "reported" once Telegram has actually accepted
     // the message. Marking it first would mean a single 429 silently swallows
     // the incident forever, because nothing re-alerts a host already down.
