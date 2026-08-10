@@ -40,6 +40,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # Node 20 is what the monitor workflow pins, so the suite has to pass on
+      # it. `node --test` only learned glob patterns in 22, and a bare directory
+      # argument means different things in the two — hence the shell-expanded
+      # paths in package.json. This job is what would have caught that.
       - name: Test
         run: npm test
 
