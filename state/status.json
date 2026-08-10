@@ -91,7 +91,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-10T14:49:25.723Z",
+ "updatedAt": "2026-08-10T15:43:23.758Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -99,7 +99,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-08-10T14:49:25.722Z",
+  "lastRunAt": "2026-08-10T15:43:23.756Z",
   "lastAlertAt": null
  }
 }
