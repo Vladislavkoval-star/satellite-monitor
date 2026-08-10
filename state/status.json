@@ -91,12 +91,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-10T14:23:45.892Z",
- "transportStorm": {
+ "updatedAt": "2026-08-10T14:26:20.584Z",
+ "connectivity": {
+  "blind": false,
+  "since": null,
   "consecutive": 0,
-  "lastRunAt": "2026-08-10T14:23:45.890Z",
-  "hosts": [],
-  "suppressed": false,
-  "escalated": false
+  "samples": 2,
+  "blindSamples": 0,
+  "codes": [],
+  "lastRunAt": "2026-08-10T14:26:20.582Z",
+  "lastAlertAt": null
  }
 }
