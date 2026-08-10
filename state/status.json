@@ -10,13 +10,13 @@
    "lastFailureKind": null
   },
   "sportsparkoman.com": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-10T17:32:07.053Z",
-   "lastAlertAt": "2026-08-10T17:32:07.053Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
-   "lastFailureKind": "transport"
+   "lastReason": null,
+   "lastFailureKind": null
   },
   "aseer-experiences.platinumlist.net": {
    "fails": 0,
@@ -46,13 +46,13 @@
    "lastFailureKind": null
   },
   "www.beattheheatdxb.ae": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-10T17:32:07.053Z",
-   "lastAlertAt": "2026-08-10T17:32:07.053Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
-   "lastFailureKind": "transport"
+   "lastReason": null,
+   "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
    "fails": 0,
@@ -73,33 +73,33 @@
    "lastFailureKind": null
   },
   "ibiza-tickets.co": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-10T17:32:07.053Z",
-   "lastAlertAt": "2026-08-10T17:32:07.053Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
-   "lastFailureKind": "transport"
+   "lastReason": null,
+   "lastFailureKind": null
   },
   "london-musicals.uk": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-10T17:32:07.053Z",
-   "lastAlertAt": "2026-08-10T17:32:07.053Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
-   "lastFailureKind": "transport"
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-10T17:32:07.053Z",
+ "updatedAt": "2026-08-10T18:27:55.971Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 11,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-08-10T17:32:06.636Z",
+  "lastRunAt": "2026-08-10T18:27:55.391Z",
   "lastAlertAt": null
  }
 }
