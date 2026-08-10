@@ -59,7 +59,12 @@ export async function checkDns(host) {
 
   if (ok.length === 0) {
     const code = missing[0]?.code || errored[0]?.code || 'no records';
-    return { ok: false, addresses: [], code, partial: false };
+    // "Nobody can resolve it" splits into two very different causes. An
+    // authoritative NXDOMAIN/NODATA from at least one resolver means the name is
+    // genuinely gone (this is what caught frameless.london-tickets.uk). Every
+    // resolver merely timing out or refusing means our own DNS path is broken —
+    // the runner's, not the domain's — and must not be reported as a dead site.
+    return { ok: false, addresses: [], code, partial: false, authoritative: missing.length > 0 };
   }
 
   if (missing.length >= CONFIG.resolversMissingForFault) {
@@ -68,6 +73,7 @@ export async function checkDns(host) {
       addresses: ok[0].addresses,
       code: missing[0].code,
       partial: true,
+      authoritative: true,
       resolvedBy: ok.map((r) => r.name),
       failedOn: missing.map((r) => r.name),
     };
@@ -141,13 +147,16 @@ export async function checkHttp(host, probePath) {
     const lower = body.toLowerCase();
     const signature = HARD_FAILURE_SIGNATURES.find((s) => lower.includes(s));
 
-    if (res.status >= 500) return { ok: false, status: res.status, ms, reason: `HTTP ${res.status}` };
-    if (res.status >= 400) return { ok: false, status: res.status, ms, reason: `HTTP ${res.status}` };
-    if (signature) return { ok: false, status: res.status, ms, reason: `страница содержит "${signature}"` };
+    if (res.status >= 400) {
+      return { ok: false, status: res.status, ms, reason: `HTTP ${res.status}`, kind: 'http' };
+    }
+    if (signature) {
+      return { ok: false, status: res.status, ms, reason: `страница содержит "${signature}"`, kind: 'content' };
+    }
     // An empty robots.txt is valid, so emptiness only condemns paths that must
     // return content.
     if (body.trim().length === 0 && !probePath.endsWith('robots.txt')) {
-      return { ok: false, status: res.status, ms, reason: 'пустой ответ' };
+      return { ok: false, status: res.status, ms, reason: 'пустой ответ', kind: 'content' };
     }
 
     // A satellite whose Queue-it redirect leaked into a non-HTML probe means
@@ -159,11 +168,15 @@ export async function checkHttp(host, probePath) {
     return { ok: true, status: res.status, ms, bytes: body.length };
   } catch (err) {
     const ms = Date.now() - started;
+    // Nothing here came back from the site: the request never completed. Either
+    // the far end is unreachable or our own egress is. Only the fleet-wide view
+    // in storm.mjs can tell those apart, so the kind is recorded and the
+    // judgement deferred.
     const reason =
       err.name === 'AbortError'
         ? `таймаут >${CONFIG.timeoutMs / 1000}с`
         : `сетевая ошибка: ${err.cause?.code || err.code || err.name}`;
-    return { ok: false, status: null, ms, reason };
+    return { ok: false, status: null, ms, reason, kind: 'transport' };
   }
 }
 
@@ -177,47 +190,66 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  * or DNS hiccup is absorbed here, within seconds, rather than by waiting for
  * the next hourly tick.
  */
+async function probeOnce(target, attempt) {
+  const dnsResult = await checkDns(target.host);
+  if (!dnsResult.ok) {
+    const reason = dnsResult.partial
+      ? `DNS отвечает не везде: работает через ${dnsResult.resolvedBy.join(', ')}, ` +
+        `не находят ${dnsResult.failedOn.join(', ')} (${dnsResult.code}) — часть пользователей сайт не откроет`
+      : `DNS не резолвится (${dnsResult.code || 'no records'})`;
+    return {
+      host: target.host,
+      type: target.type,
+      traffic: target.traffic,
+      ok: false,
+      reason,
+      // No resolver could answer and none of them said "no such name": that is
+      // our DNS path failing, not the domain dying.
+      failureKind: dnsResult.authoritative ? 'dns' : 'transport',
+      attempts: attempt,
+      ssl: null,
+    };
+  }
+
+  const [http, ssl] = await Promise.all([
+    checkHttp(target.host, target.probe),
+    checkSsl(target.host),
+  ]);
+  return {
+    host: target.host,
+    type: target.type,
+    traffic: target.traffic,
+    ok: http.ok,
+    reason: http.ok ? null : http.reason,
+    failureKind: http.ok ? null : (http.kind ?? 'transport'),
+    warn: http.warn ?? null,
+    status: http.status,
+    ms: http.ms,
+    attempts: attempt,
+    ssl,
+  };
+}
+
 export async function probeHost(target) {
   const attempts = Math.max(1, CONFIG.retriesWithinRun);
   let last;
 
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
-    const dnsResult = await checkDns(target.host);
-    if (!dnsResult.ok) {
-      const reason = dnsResult.partial
-        ? `DNS отвечает не везде: работает через ${dnsResult.resolvedBy.join(', ')}, ` +
-          `не находят ${dnsResult.failedOn.join(', ')} (${dnsResult.code}) — часть пользователей сайт не откроет`
-        : `DNS не резолвится (${dnsResult.code || 'no records'})`;
-      last = {
-        host: target.host,
-        type: target.type,
-        traffic: target.traffic,
-        ok: false,
-        reason,
-        attempts: attempt,
-        ssl: null,
-      };
-    } else {
-      const [http, ssl] = await Promise.all([
-        checkHttp(target.host, target.probe),
-        checkSsl(target.host),
-      ]);
-      last = {
-        host: target.host,
-        type: target.type,
-        traffic: target.traffic,
-        ok: http.ok,
-        reason: http.ok ? null : http.reason,
-        warn: http.warn ?? null,
-        status: http.status,
-        ms: http.ms,
-        attempts: attempt,
-        ssl,
-      };
-    }
-
+    last = await probeOnce(target, attempt);
     if (last.ok) return last;
     if (attempt < attempts) await sleep(CONFIG.retryDelayMs);
+  }
+
+  // One more go, only for transport failures and only after a longer pause. The
+  // standard attempts are seconds apart, which is inside the length of a typical
+  // egress stall — so on its own that retry pair cannot tell a stall from a dead
+  // host. This attempt is free on a healthy fleet and never fires for an HTTP
+  // error or a real NXDOMAIN.
+  if (last.failureKind === 'transport' && CONFIG.transportRetryDelayMs > 0) {
+    await sleep(CONFIG.transportRetryDelayMs);
+    const extra = await probeOnce(target, attempts + 1);
+    if (extra.ok) return extra;
+    last = extra;
   }
 
   last.reason = `${last.reason} (${last.attempts} попытк${last.attempts === 1 ? 'а' : 'и'})`;

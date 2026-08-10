@@ -21,7 +21,19 @@ export async function saveState(file, state) {
 }
 
 export function emptyHostState() {
-  return { fails: 0, down: false, downSince: null, lastAlertAt: null, lastSslAlertAt: null };
+  return {
+    fails: 0,
+    down: false,
+    downSince: null,
+    lastAlertAt: null,
+    lastSslAlertAt: null,
+    // Why the last failing observation failed. The alert text used to be the
+    // only place this existed, so reconstructing an incident meant reading
+    // Telegram scrollback — and Actions logs age out. Keeping it in the state
+    // file puts the cause in the same commit history as the transition.
+    lastReason: null,
+    lastFailureKind: null,
+  };
 }
 
 export function humaniseDuration(fromIso) {

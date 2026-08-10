@@ -37,6 +37,45 @@ export const CONFIG = {
   timeoutMs: 20000,
   /** Concurrent probes. */
   concurrency: 8,
+  /**
+   * Extra attempt for transport-class failures only (connect timeout, reset,
+   * socket hang up), after a longer pause than retryDelayMs.
+   *
+   * The two standard attempts sit ~4s apart, so a runner-side network stall
+   * longer than that window fails both and looks exactly like a dead site.
+   * A third attempt after this delay costs nothing on a healthy fleet — it only
+   * runs for a host that has already failed twice on transport — and it is not
+   * applied to HTTP 5xx or an authoritative NXDOMAIN, where waiting adds
+   * nothing. Set to 0 to disable.
+   */
+  transportRetryDelayMs: 12000,
+  /**
+   * Transport-storm suppression.
+   *
+   * A CI runner shares one egress path with every probe in the run. When that
+   * path stalls, every host fails at the same instant with the same connect
+   * error — which is indistinguishable, per host, from the sites being down.
+   * On 2026-08-08 seven independent whitelabels on four different hosting
+   * providers all went "down" inside the same millisecond with
+   * UND_ERR_CONNECT_TIMEOUT and "recovered" on the next tick: no outage
+   * happened, the runner's network hiccuped.
+   *
+   * So a transport failure affecting a large share of the fleet at once is
+   * treated as our own network until the next run confirms it. Failures that
+   * cannot be caused by our egress — HTTP 4xx/5xx, an authoritative NXDOMAIN,
+   * an error page in the body — are never suppressed and still alert instantly.
+   */
+  transportStormMinHosts: 3,
+  transportStormRatio: 0.5,
+  /**
+   * How many consecutive storming runs to absorb before alerting anyway.
+   *
+   * 1 means a single bad tick is swallowed and a fleet still failing on the
+   * next tick pages normally. That is the point where "our network blipped"
+   * stops being the likelier explanation — at the cost of one tick's delay on a
+   * genuine provider-wide outage.
+   */
+  transportStormMaxConsecutiveRuns: 1,
   /** Warn when the TLS certificate expires within this many days. Once per host per day. */
   sslWarnDays: 14,
   /**

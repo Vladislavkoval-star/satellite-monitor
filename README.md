@@ -40,8 +40,39 @@ The render tier drives a real Chromium, which satisfies the JavaScript challenge
 - The render tier skips any host the availability tier already reported down, so one incident produces one message.
 - An empty catalogue only pages for hosts banded `high`. On a satellite whose event has finished, showing nothing to buy is the correct state, so it is logged rather than alerted.
 - SSL warnings are rate-limited to once per host per day.
+- **A transport failure hitting most of the fleet at once is treated as our own network, not theirs** — see below.
 
-State lives in `state/` and is committed back by the workflow, giving an audit trail of every transition.
+State lives in `state/` and is committed back by the workflow, giving an audit trail of every transition. Each host also carries `lastReason` and `lastFailureKind`, so a past incident can be explained from the commit history alone rather than from Telegram scrollback and Actions logs that age out.
+
+## When the runner is the outage
+
+Every probe in a run leaves the same CI runner through the same egress path. When that path stalls, each host independently reports a connect timeout — and per host that is indistinguishable from the site being down.
+
+This is not theoretical. On 8 August 2026 seven independent whitelabels, on four different hosting providers in four countries, all went "down" inside the same millisecond with `UND_ERR_CONNECT_TIMEOUT`, and all "recovered" on the next tick. The alert claimed each had been down for 25 minutes. Nothing had been down at all: the runner's network hiccuped for longer than the gap between the two in-run retries. The `*.platinumlist.net` satellites in the same run stayed green, which is the tell — a real incident does not respect the boundary between "external hosts" and "our CDN".
+
+Two guards, working at different levels:
+
+- **A third attempt, transport failures only** (`transportRetryDelayMs`, 12s). The standard two attempts are ~4s apart, which is inside the length of a typical stall, so on their own they cannot separate one from a dead host. This attempt is free on a healthy fleet — it only runs for a host that already failed twice on transport — and never fires for an HTTP error or a real NXDOMAIN, where waiting buys nothing.
+- **Storm suppression** (`scripts/lib/storm.mjs`). If transport failures reach both an absolute floor (`transportStormMinHosts`) and a share of the fleet (`transportStormRatio`) in one run, the run is recorded and the verdict deferred one tick. Nothing is alerted, and — the part that killed the second bogus message — nothing is marked down, so no phantom recovery follows when the next run is clean. A fleet still failing after `transportStormMaxConsecutiveRuns` storming runs pages normally.
+
+What is deliberately **never** suppressed, because our own egress cannot manufacture it:
+
+| Failure | Kind | Behaviour |
+|---|---|---|
+| HTTP 4xx / 5xx | `http` | alerts immediately, even mid-storm |
+| Error page in the body (`database connection`, `nginx error`, …) | `content` | alerts immediately |
+| Blank render, no title, nothing to buy | `content` | alerts immediately |
+| Authoritative NXDOMAIN / NODATA from any resolver | `dns` | alerts immediately |
+| Every resolver merely timing out or refusing | `transport` | eligible for suppression — that is our DNS path, not the domain |
+| Connect timeout, reset, socket hang up, navigation timeout | `transport` | eligible for suppression |
+
+So a single site going down still pages on the first failing run, as before — a storm needs several hosts at once. The cost is one tick's delay on a genuine provider-wide outage, which is the trade this fleet wants: those are rare, and the false alarm they are being traded against had already happened.
+
+The absolute floor exists so a small fleet cannot suppress a real outage: at `TOP_N_PER_TYPE=2`, "half the fleet" is one site and the shared-cause signal does not exist.
+
+The same guard runs in the render tier, where the shared resource is the runner's CPU as much as its network — the README section below records five concurrent tabs starving each other until nine healthy whitelabels all blew the navigation timeout in one run.
+
+`npm test` covers this: the suite drives the real decision path with synthetic runs, including the 8 August shape.
 
 All of the above is tunable in one file, `scripts/lib/config.mjs`.
 
@@ -109,6 +140,15 @@ Repository **variables**:
 |----------|---------|---------|
 | `TOP_N_PER_TYPE` | `10` | how many satellites and whitelabels to monitor |
 | `EXCLUDED_HOSTS` | empty | comma-separated hosts that appear in analytics but are not ours to monitor |
+
+Alerting thresholds live in `scripts/lib/config.mjs`, not in repository variables. The ones governing storm suppression:
+
+| Setting | Default | Purpose |
+|---|---|---|
+| `transportStormMinHosts` | `3` | absolute floor of simultaneous transport failures |
+| `transportStormRatio` | `0.5` | share of the fleet that must be affected |
+| `transportStormMaxConsecutiveRuns` | `1` | storming runs absorbed before alerting anyway |
+| `transportRetryDelayMs` | `12000` | pause before the transport-only third attempt (`0` disables) |
 
 Nothing credential-shaped is committed. The Telegram helper deliberately never logs an API response body, because the request path contains the bot token.
 

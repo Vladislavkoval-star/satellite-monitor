@@ -6,7 +6,13 @@
  * absorbed by immediate retries inside the run, not by waiting for the next
  * tick. One alert per incident: while a host stays down nothing further is
  * sent, and a single recovery message closes it out.
+ *
+ * The one exception to "alert on the first run" is a transport storm: when a
+ * large share of the fleet fails at the same instant on connect errors alone,
+ * the likeliest cause is this runner's egress rather than every site at once, so
+ * the run is recorded and the judgement deferred one tick. See lib/storm.mjs.
  */
+import { fileURLToPath } from 'node:url';
 import { CONFIG, PATHS, loadTargets } from './lib/config.mjs';
 import { probeAll } from './lib/probe.mjs';
 import {
@@ -16,6 +22,7 @@ import {
   loadState,
   saveState,
 } from './lib/state.mjs';
+import { assessTransportStorm } from './lib/storm.mjs';
 import {
   formatDownAlert,
   formatRecoveryAlert,
@@ -24,6 +31,81 @@ import {
 } from './lib/notify.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
+
+/**
+ * Turn a set of probe results into alert decisions, mutating host state.
+ *
+ * Pure apart from that mutation — no network, no IO, and `now` is injected — so
+ * scripts/storm.test.mjs can drive it with synthetic runs.
+ *
+ * @param {object} args
+ * @param {Array<object>} args.results        probe results for this run
+ * @param {object} args.state                 availability state (mutated)
+ * @param {Set<string>} args.renderAlreadyDown hosts the render tier already reported
+ * @param {{suppress: boolean, hosts: string[]}} args.storm storm assessment
+ * @param {string} args.now                   ISO timestamp for this run
+ * @param {object} [args.config]
+ */
+export function reconcile({ results, state, renderAlreadyDown, storm, now, config = CONFIG }) {
+  if (!state.hosts) state.hosts = {};
+
+  const suppressedHosts = new Set(storm.suppress ? storm.hosts : []);
+  const pendingDown = [];
+  const recovered = [];
+  const sslWarnings = [];
+  const suppressed = [];
+
+  for (const result of results) {
+    const host = state.hosts[result.host] ?? emptyHostState();
+
+    if (result.ok) {
+      if (host.down && config.notifyOnRecovery) {
+        recovered.push({ host: result.host, downFor: humaniseDuration(host.downSince) });
+      }
+      host.fails = 0;
+      host.down = false;
+      host.downSince = null;
+      host.lastAlertAt = null;
+      host.lastReason = null;
+      host.lastFailureKind = null;
+    } else if (suppressedHosts.has(result.host)) {
+      // Storm: the observation is real, the conclusion is not trustworthy yet.
+      // Record what was seen and leave fails/down untouched, so the host is
+      // neither alerted now nor able to send a bogus recovery message next tick
+      // (which is what produced the "лежал 25 мин" pair on 2026-08-08).
+      host.lastReason = result.reason;
+      host.lastFailureKind = result.failureKind ?? null;
+      suppressed.push(result);
+    } else {
+      host.fails += 1;
+      host.lastReason = result.reason;
+      host.lastFailureKind = result.failureKind ?? null;
+      if (!host.down && host.fails >= config.failuresBeforeAlert) {
+        if (renderAlreadyDown.has(result.host)) {
+          // Same incident, already reported by the other tier.
+          host.down = true;
+          host.downSince = now;
+          host.lastAlertAt = now;
+          host.dedupedWithRender = true;
+        } else {
+          pendingDown.push(result);
+        }
+      }
+    }
+
+    const ssl = result.ssl;
+    if (ssl?.ok && typeof ssl.daysLeft === 'number' && ssl.daysLeft <= config.sslWarnDays) {
+      if (hoursSince(host.lastSslAlertAt) >= 24) {
+        host.lastSslAlertAt = now;
+        sslWarnings.push({ host: result.host, daysLeft: ssl.daysLeft, validTo: ssl.validTo });
+      }
+    }
+
+    state.hosts[result.host] = host;
+  }
+
+  return { pendingDown, recovered, sslWarnings, suppressed };
+}
 
 async function main() {
   const targets = await loadTargets();
@@ -42,47 +124,33 @@ async function main() {
   );
 
   const results = await probeAll(targets);
+  const now = new Date().toISOString();
 
-  const pendingDown = [];
-  const recovered = [];
-  const sslWarnings = [];
+  const storm = assessTransportStorm(results, {
+    minHosts: CONFIG.transportStormMinHosts,
+    ratio: CONFIG.transportStormRatio,
+    maxConsecutiveRuns: CONFIG.transportStormMaxConsecutiveRuns,
+    previous: state.transportStorm,
+  });
 
-  for (const result of results) {
-    const host = state.hosts[result.host] ?? emptyHostState();
+  const { pendingDown, recovered, sslWarnings, suppressed } = reconcile({
+    results,
+    state,
+    renderAlreadyDown,
+    storm,
+    now,
+  });
 
-    if (result.ok) {
-      if (host.down && CONFIG.notifyOnRecovery) {
-        recovered.push({ host: result.host, downFor: humaniseDuration(host.downSince) });
-      }
-      host.fails = 0;
-      host.down = false;
-      host.downSince = null;
-      host.lastAlertAt = null;
-    } else {
-      host.fails += 1;
-      if (!host.down && host.fails >= CONFIG.failuresBeforeAlert) {
-        if (renderAlreadyDown.has(result.host)) {
-          // Same incident, already reported by the other tier.
-          console.log(`  dedup ${result.host}: рендер уже сообщил об этом инциденте`);
-          host.down = true;
-          host.downSince = new Date().toISOString();
-          host.lastAlertAt = new Date().toISOString();
-        } else {
-          pendingDown.push(result);
-        }
-      }
-    }
-
-    const ssl = result.ssl;
-    if (ssl?.ok && typeof ssl.daysLeft === 'number' && ssl.daysLeft <= CONFIG.sslWarnDays) {
-      if (hoursSince(host.lastSslAlertAt) >= 24) {
-        host.lastSslAlertAt = new Date().toISOString();
-        sslWarnings.push({ host: result.host, daysLeft: ssl.daysLeft, validTo: ssl.validTo });
-      }
-    }
-
-    state.hosts[result.host] = host;
-  }
+  // Persisted so the audit trail shows a suppressed run as a deliberate decision
+  // rather than as a gap where nothing happened, and so the next run knows how
+  // many storming ticks came before it.
+  state.transportStorm = {
+    consecutive: storm.consecutive,
+    lastRunAt: now,
+    hosts: storm.storm ? storm.hosts : [],
+    suppressed: storm.suppress,
+    escalated: storm.escalated,
+  };
 
   // Hosts that have left targets.json must not keep a stale `down: true`, or
   // they would be permanently muted if they are ever monitored again.
@@ -96,15 +164,20 @@ async function main() {
 
   const okCount = results.filter((r) => r.ok).length;
   console.log(
-    `checked ${results.length} hosts · ok ${okCount} · new failures ${pendingDown.length}`
+    `checked ${results.length} hosts · ok ${okCount} · new failures ${pendingDown.length}` +
+      `${suppressed.length ? ` · suppressed ${suppressed.length}` : ''}`
   );
   for (const r of results) {
     const flag = r.ok ? 'OK  ' : 'FAIL';
-    const extra = r.ok ? `${r.status} ${r.ms}ms` : r.reason;
+    const extra = r.ok ? `${r.status} ${r.ms}ms` : `${r.reason} [${r.failureKind}]`;
     console.log(`  ${flag} ${r.host.padEnd(48)} ${extra}${r.warn ? ` [warn: ${r.warn}]` : ''}`);
     if (r.singleResolverMiss) {
       console.log(`       note: ${r.singleResolverMiss} не находит домен — вероятно его блоклист, не наш DNS`);
     }
+  }
+  if (storm.storm) {
+    console.log(`\n${storm.suppress ? 'STORM SUPPRESSED' : 'STORM ESCALATED'}: ${storm.summary}`);
+    console.log(`  hosts: ${storm.hosts.join(', ')}`);
   }
 
   if (DRY_RUN) {
@@ -146,7 +219,11 @@ function markDown(state, hostname) {
   state.hosts[hostname] = host;
 }
 
-main().catch((err) => {
-  console.error(`[check] fatal: ${err.message}`);
-  process.exit(1);
-});
+// Only sweep when executed directly. Importing this file (tests) must not fire
+// a live probe run.
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error(`[check] fatal: ${err.message}`);
+    process.exit(1);
+  });
+}
