@@ -1,6 +1,6 @@
 {
  "generated_from": "GA4",
- "rule": "top 10 satellites + top 10 whitelabels by 30-day sessions",
+ "rule": "top 5 satellites + top 5 whitelabels by 30-day sessions",
  "targets": [
   {
    "host": "laperle.platinumlist.net",
@@ -21,12 +21,6 @@
    "traffic": "high"
   },
   {
-   "host": "www.beattheheatdxb.ae",
-   "type": "whitelabel",
-   "probe": "/wp-json/",
-   "traffic": "high"
-  },
-  {
    "host": "aseer-experiences.platinumlist.net",
    "type": "satellite",
    "probe": "/wp-json/",
@@ -39,38 +33,14 @@
    "traffic": "high"
   },
   {
-   "host": "sportsparkoman.com",
+   "host": "www.beattheheatdxb.ae",
    "type": "whitelabel",
    "probe": "/wp-json/",
    "traffic": "high"
   },
   {
-   "host": "museumofillusions.platinumlist.net",
-   "type": "satellite",
-   "probe": "/robots.txt",
-   "traffic": "high"
-  },
-  {
-   "host": "aya-universe.platinumlist.net",
-   "type": "satellite",
-   "probe": "/wp-json/",
-   "traffic": "high"
-  },
-  {
-   "host": "mastercard.platinumlist.net",
-   "type": "satellite",
-   "probe": "/robots.txt",
-   "traffic": "high"
-  },
-  {
-   "host": "maf.platinumlist.net",
-   "type": "satellite",
-   "probe": "/robots.txt",
-   "traffic": "high"
-  },
-  {
-   "host": "sportsparkoman.platinumlist.net",
-   "type": "satellite",
+   "host": "sportsparkoman.com",
+   "type": "whitelabel",
    "probe": "/wp-json/",
    "traffic": "high"
   },
@@ -90,37 +60,7 @@
    "host": "london-musicals.uk",
    "type": "whitelabel",
    "probe": "/wp-json/",
-   "traffic": "low"
-  },
-  {
-   "host": "london-tickets.uk",
-   "type": "whitelabel",
-   "probe": "/wp-json/",
-   "traffic": "low"
-  },
-  {
-   "host": "platinumlist.londontheatredirect.com",
-   "type": "whitelabel",
-   "probe": "/",
-   "traffic": "low"
-  },
-  {
-   "host": "www.spotlightlive.ae",
-   "type": "whitelabel",
-   "probe": "/",
-   "traffic": "low"
-  },
-  {
-   "host": "barcelona-tickets.co",
-   "type": "whitelabel",
-   "probe": "/wp-json/",
-   "traffic": "low"
-  },
-  {
-   "host": "concert.ibiza-tickets.co",
-   "type": "whitelabel",
-   "probe": "/",
-   "traffic": "low"
+   "traffic": "high"
   }
  ]
 }
