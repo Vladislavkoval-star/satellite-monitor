@@ -56,53 +56,11 @@
    "lastAlertAt": null,
    "lastSslAlertAt": null
   },
-  "london-tickets.uk": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
   "tickets.expocitydubai.com": {
-   "fails": 102,
+   "fails": 103,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
-   "lastSslAlertAt": null
-  },
-  "aya-universe.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "museumofillusions.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "mastercard.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "sportsparkoman.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "maf.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
    "lastSslAlertAt": null
   },
   "london-musicals.uk": {
@@ -111,35 +69,7 @@
    "downSince": null,
    "lastAlertAt": null,
    "lastSslAlertAt": null
-  },
-  "platinumlist.londontheatredirect.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "www.spotlightlive.ae": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "concert.ibiza-tickets.co": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
-  },
-  "barcelona-tickets.co": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null
   }
  },
- "updatedAt": "2026-08-10T04:48:48.741Z"
+ "updatedAt": "2026-08-10T06:03:38.503Z"
 }
