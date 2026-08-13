@@ -1,13 +1,13 @@
 {
  "hosts": {
   "laperle.platinumlist.net": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-13T08:42:12.972Z",
-   "lastAlertAt": "2026-08-13T08:42:12.972Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "HTTP 504 (3 попытки)",
-   "lastFailureKind": "http"
+   "lastReason": null,
+   "lastFailureKind": null
   },
   "sportsparkoman.com": {
    "fails": 0,
@@ -55,13 +55,13 @@
    "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-13T08:42:12.367Z",
-   "lastAlertAt": "2026-08-13T08:42:12.367Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "HTTP 504 (3 попытки)",
-   "lastFailureKind": "http",
+   "lastReason": null,
+   "lastFailureKind": null,
    "dedupedWithRender": true
   },
   "esports-world-cup.platinumlist.net": {
@@ -92,15 +92,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-13T08:42:12.972Z",
+ "updatedAt": "2026-08-13T09:47:16.664Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 10,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-08-13T08:42:12.367Z",
+  "lastRunAt": "2026-08-13T09:47:16.102Z",
   "lastAlertAt": null
  }
 }
