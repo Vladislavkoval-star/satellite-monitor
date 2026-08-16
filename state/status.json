@@ -46,7 +46,7 @@
    "lastFailureKind": null
   },
   "www.beattheheatdxb.ae": {
-   "fails": 7,
+   "fails": 8,
    "down": true,
    "downSince": "2026-08-16T14:33:40.968Z",
    "lastAlertAt": "2026-08-16T14:33:40.968Z",
@@ -92,17 +92,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-16T16:44:00.044Z",
+ "updatedAt": "2026-08-16T17:02:15.192Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 7,
-  "blindSamples": 2,
-  "codes": [
-   "TIMEOUT"
-  ],
-  "lastRunAt": "2026-08-16T16:44:00.043Z",
+  "samples": 10,
+  "blindSamples": 0,
+  "codes": [],
+  "lastRunAt": "2026-08-16T17:02:15.190Z",
   "lastAlertAt": null
  }
 }
