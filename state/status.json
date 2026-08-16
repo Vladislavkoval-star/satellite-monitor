@@ -46,13 +46,13 @@
    "lastFailureKind": null
   },
   "www.beattheheatdxb.ae": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-08-16T14:33:40.968Z",
+   "lastAlertAt": "2026-08-16T14:33:40.968Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "DNS не резолвится (ETIMEOUT) (3 попытки)",
+   "lastFailureKind": "transport"
   },
   "tickets.expocitydubai.com": {
    "fails": 0,
@@ -92,15 +92,17 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-16T14:00:57.030Z",
+ "updatedAt": "2026-08-16T14:33:40.968Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 2,
-  "blindSamples": 0,
-  "codes": [],
-  "lastRunAt": "2026-08-16T14:00:57.029Z",
+  "samples": 7,
+  "blindSamples": 1,
+  "codes": [
+   "TIMEOUT"
+  ],
+  "lastRunAt": "2026-08-16T14:33:40.640Z",
   "lastAlertAt": null
  }
 }
