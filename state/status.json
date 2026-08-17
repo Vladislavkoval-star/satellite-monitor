@@ -27,15 +27,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "meryal-waterpark.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "dubaicomedyfestival.platinumlist.net": {
    "fails": 0,
    "down": false,
@@ -90,9 +81,18 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "selangor.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-17T03:58:16.549Z",
+ "updatedAt": "2026-08-17T04:37:30.326Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -100,7 +100,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-08-17T03:58:16.548Z",
+  "lastRunAt": "2026-08-17T04:37:30.325Z",
   "lastAlertAt": null
  }
 }
