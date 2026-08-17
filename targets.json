@@ -9,13 +9,13 @@
    "traffic": "high"
   },
   {
-   "host": "dubaicomedyfestival.platinumlist.net",
+   "host": "selangor.platinumlist.net",
    "type": "satellite",
-   "probe": "/wp-json/",
+   "probe": "/robots.txt",
    "traffic": "high"
   },
   {
-   "host": "esports-world-cup.platinumlist.net",
+   "host": "dubaicomedyfestival.platinumlist.net",
    "type": "satellite",
    "probe": "/wp-json/",
    "traffic": "high"
@@ -27,13 +27,25 @@
    "traffic": "high"
   },
   {
-   "host": "meryal-waterpark.platinumlist.net",
+   "host": "www.beattheheatdxb.ae",
+   "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "esports-world-cup.platinumlist.net",
    "type": "satellite",
    "probe": "/wp-json/",
    "traffic": "high"
   },
   {
-   "host": "www.beattheheatdxb.ae",
+   "host": "ibiza-tickets.co",
+   "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "london-musicals.uk",
    "type": "whitelabel",
    "probe": "/wp-json/",
    "traffic": "high"
@@ -45,21 +57,9 @@
    "traffic": "high"
   },
   {
-   "host": "ibiza-tickets.co",
-   "type": "whitelabel",
-   "probe": "/wp-json/",
-   "traffic": "high"
-  },
-  {
    "host": "tickets.expocitydubai.com",
    "type": "whitelabel",
    "probe": "/",
-   "traffic": "high"
-  },
-  {
-   "host": "london-musicals.uk",
-   "type": "whitelabel",
-   "probe": "/wp-json/",
    "traffic": "high"
   }
  ]
