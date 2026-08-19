@@ -65,13 +65,13 @@
    "lastFailureKind": null
   },
   "ibiza-tickets.co": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-08-19T17:43:22.681Z",
-   "lastAlertAt": "2026-08-19T17:43:22.681Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
-   "lastFailureKind": "transport"
+   "lastReason": null,
+   "lastFailureKind": null
   },
   "london-musicals.uk": {
    "fails": 0,
@@ -92,15 +92,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-19T17:43:22.681Z",
+ "updatedAt": "2026-08-19T17:59:47.964Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 7,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-08-19T17:43:22.352Z",
+  "lastRunAt": "2026-08-19T17:59:47.640Z",
   "lastAlertAt": null
  }
 }
