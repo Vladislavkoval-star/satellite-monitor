@@ -10,13 +10,13 @@
    "lastFailureKind": null
   },
   "sportsparkoman.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-08-23T02:12:24.533Z",
+   "lastAlertAt": "2026-08-23T02:12:24.533Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
+   "lastFailureKind": "transport"
   },
   "aseer-experiences.platinumlist.net": {
    "fails": 0,
@@ -37,13 +37,13 @@
    "lastFailureKind": null
   },
   "www.beattheheatdxb.ae": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-08-23T02:12:24.533Z",
+   "lastAlertAt": "2026-08-23T02:12:24.533Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
+   "lastFailureKind": "transport"
   },
   "tickets.expocitydubai.com": {
    "fails": 0,
@@ -65,22 +65,22 @@
    "lastFailureKind": null
   },
   "ibiza-tickets.co": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-08-23T02:12:24.533Z",
+   "lastAlertAt": "2026-08-23T02:12:24.533Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
+   "lastFailureKind": "transport"
   },
   "london-musicals.uk": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-08-23T02:12:24.533Z",
+   "lastAlertAt": "2026-08-23T02:12:24.533Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "сетевая ошибка: UND_ERR_CONNECT_TIMEOUT (3 попытки)",
+   "lastFailureKind": "transport"
   },
   "selangor.platinumlist.net": {
    "fails": 0,
@@ -92,15 +92,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-23T00:35:34.150Z",
+ "updatedAt": "2026-08-23T02:12:24.533Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 2,
+  "samples": 11,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-08-23T00:35:34.148Z",
+  "lastRunAt": "2026-08-23T02:12:24.206Z",
   "lastAlertAt": null
  }
 }
