@@ -18,15 +18,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "aseer-experiences.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "dubaicomedyfestival.platinumlist.net": {
    "fails": 0,
    "down": false,
@@ -55,15 +46,6 @@
    "lastFailureKind": null,
    "dedupedWithRender": true
   },
-  "esports-world-cup.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "ibiza-tickets.co": {
    "fails": 0,
    "down": false,
@@ -90,9 +72,27 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "uaeproleague.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
+  },
+  "discover-abha.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-24T04:06:41.513Z",
+ "updatedAt": "2026-08-24T04:56:26.830Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -100,7 +100,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-08-24T04:06:41.512Z",
+  "lastRunAt": "2026-08-24T04:56:26.829Z",
   "lastAlertAt": null
  }
 }
