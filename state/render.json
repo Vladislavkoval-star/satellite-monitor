@@ -46,7 +46,7 @@
    "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 761,
+   "fails": 762,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
@@ -91,10 +91,10 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-08-27T10:37:36.466Z",
+ "updatedAt": "2026-08-27T20:44:28.880Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-08-27T10:37:36.466Z",
+  "lastRunAt": "2026-08-27T20:44:28.880Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
