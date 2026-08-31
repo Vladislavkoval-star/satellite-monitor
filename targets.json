@@ -9,6 +9,12 @@
    "traffic": "high"
   },
   {
+   "host": "discover-abha.platinumlist.net",
+   "type": "satellite",
+   "probe": "/robots.txt",
+   "traffic": "high"
+  },
+  {
    "host": "selangor.platinumlist.net",
    "type": "satellite",
    "probe": "/robots.txt",
@@ -21,25 +27,19 @@
    "traffic": "high"
   },
   {
-   "host": "discover-abha.platinumlist.net",
-   "type": "satellite",
-   "probe": "/robots.txt",
-   "traffic": "high"
-  },
-  {
    "host": "dubaicomedyfestival.platinumlist.net",
    "type": "satellite",
    "probe": "/wp-json/",
    "traffic": "high"
   },
   {
-   "host": "www.beattheheatdxb.ae",
+   "host": "london-musicals.uk",
    "type": "whitelabel",
    "probe": "/wp-json/",
    "traffic": "high"
   },
   {
-   "host": "london-musicals.uk",
+   "host": "www.beattheheatdxb.ae",
    "type": "whitelabel",
    "probe": "/wp-json/",
    "traffic": "high"
