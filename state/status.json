@@ -9,15 +9,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "sportsparkoman.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "dubaicomedyfestival.platinumlist.net": {
    "fails": 0,
    "down": false,
@@ -90,9 +81,18 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "qt-platinumlist.cc": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-09-07T06:36:49.890Z",
+ "updatedAt": "2026-09-07T12:58:39.136Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -100,7 +100,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-09-07T06:36:49.889Z",
+  "lastRunAt": "2026-09-07T12:58:39.135Z",
   "lastAlertAt": null
  }
 }
