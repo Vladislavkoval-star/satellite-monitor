@@ -51,15 +51,15 @@
    "traffic": "high"
   },
   {
-   "host": "tickets.expocitydubai.com",
+   "host": "qt-platinumlist.cc",
    "type": "whitelabel",
    "probe": "/",
    "traffic": "high"
   },
   {
-   "host": "sportsparkoman.com",
+   "host": "tickets.expocitydubai.com",
    "type": "whitelabel",
-   "probe": "/wp-json/",
+   "probe": "/",
    "traffic": "high"
   }
  ]
