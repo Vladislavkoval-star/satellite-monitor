@@ -15,9 +15,9 @@
    "traffic": "high"
   },
   {
-   "host": "selangor.platinumlist.net",
+   "host": "dubaicomedyfestival.platinumlist.net",
    "type": "satellite",
-   "probe": "/robots.txt",
+   "probe": "/wp-json/",
    "traffic": "high"
   },
   {
@@ -27,15 +27,28 @@
    "traffic": "high"
   },
   {
-   "host": "dubaicomedyfestival.platinumlist.net",
+   "host": "saleconsole.platinumlist.net",
    "type": "satellite",
-   "probe": "/wp-json/",
+   "probe": "/",
    "traffic": "high"
   },
   {
    "host": "london-musicals.uk",
    "type": "whitelabel",
    "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "qt-platinumlist.cc",
+   "type": "whitelabel",
+   "probe": "/",
+   "probe_unverified": true,
+   "traffic": "high"
+  },
+  {
+   "host": "tickets.expocitydubai.com",
+   "type": "whitelabel",
+   "probe": "/",
    "traffic": "high"
   },
   {
@@ -48,18 +61,6 @@
    "host": "ibiza-tickets.co",
    "type": "whitelabel",
    "probe": "/wp-json/",
-   "traffic": "high"
-  },
-  {
-   "host": "qt-platinumlist.cc",
-   "type": "whitelabel",
-   "probe": "/",
-   "traffic": "high"
-  },
-  {
-   "host": "tickets.expocitydubai.com",
-   "type": "whitelabel",
-   "probe": "/",
    "traffic": "high"
   }
  ]
