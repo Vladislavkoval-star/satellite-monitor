@@ -37,7 +37,7 @@
    "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 882,
+   "fails": 883,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
@@ -46,15 +46,6 @@
    "lastFailureKind": "content"
   },
   "london-musicals.uk": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
-  "selangor.platinumlist.net": {
    "fails": 0,
    "down": false,
    "downSince": null,
@@ -89,12 +80,21 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "saleconsole.platinumlist.net": {
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-09-14T13:06:29.326Z",
+   "lastAlertAt": "2026-09-14T13:06:29.326Z",
+   "lastSslAlertAt": null,
+   "lastReason": "нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты (2 попытки)",
+   "lastFailureKind": "content"
   }
  },
- "updatedAt": "2026-09-14T06:27:05.318Z",
+ "updatedAt": "2026-09-14T13:06:29.327Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-09-14T06:27:05.318Z",
+  "lastRunAt": "2026-09-14T13:06:28.844Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false

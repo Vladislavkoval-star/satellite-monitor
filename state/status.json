@@ -55,15 +55,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "selangor.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "uaeproleague.platinumlist.net": {
    "fails": 0,
    "down": false,
@@ -83,16 +74,25 @@
    "lastFailureKind": null
   },
   "qt-platinumlist.cc": {
-   "fails": 45,
+   "fails": 46,
    "down": true,
    "downSince": "2026-09-08T11:08:45.859Z",
    "lastAlertAt": "2026-09-08T11:08:45.859Z",
    "lastSslAlertAt": null,
    "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
    "lastFailureKind": "dns"
+  },
+  "saleconsole.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-09-14T06:25:30.126Z",
+ "updatedAt": "2026-09-14T13:05:29.462Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -100,7 +100,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-09-14T06:25:30.125Z",
+  "lastRunAt": "2026-09-14T13:05:29.460Z",
   "lastAlertAt": null
  }
 }
