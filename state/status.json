@@ -74,7 +74,7 @@
    "lastFailureKind": null
   },
   "qt-platinumlist.cc": {
-   "fails": 84,
+   "fails": 85,
    "down": true,
    "downSince": "2026-09-08T11:08:45.859Z",
    "lastAlertAt": "2026-09-08T11:08:45.859Z",
@@ -92,7 +92,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-09-20T01:01:04.478Z",
+ "updatedAt": "2026-09-20T06:04:48.837Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -100,7 +100,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-09-20T01:01:04.477Z",
+  "lastRunAt": "2026-09-20T06:04:48.835Z",
   "lastAlertAt": null
  }
 }
