@@ -18,15 +18,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "www.beattheheatdxb.ae": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "tickets.expocitydubai.com": {
    "fails": 0,
    "down": false,
@@ -36,15 +27,6 @@
    "lastReason": null,
    "lastFailureKind": null,
    "dedupedWithRender": true
-  },
-  "ibiza-tickets.co": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
   },
   "london-musicals.uk": {
    "fails": 0,
@@ -74,7 +56,7 @@
    "lastFailureKind": null
   },
   "qt-platinumlist.cc": {
-   "fails": 93,
+   "fails": 94,
    "down": true,
    "downSince": "2026-09-08T11:08:45.859Z",
    "lastAlertAt": "2026-09-08T11:08:45.859Z",
@@ -90,9 +72,27 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "platenemlest.com": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
+  },
+  "platenumlest.com": {
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-09-21T13:58:27.751Z",
+   "lastAlertAt": "2026-09-21T13:58:27.751Z",
+   "lastSslAlertAt": null,
+   "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
+   "lastFailureKind": "dns"
   }
  },
- "updatedAt": "2026-09-21T07:06:07.601Z",
+ "updatedAt": "2026-09-21T13:58:27.751Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -100,7 +100,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-09-21T07:06:07.599Z",
+  "lastRunAt": "2026-09-21T13:58:27.269Z",
   "lastAlertAt": null
  }
 }

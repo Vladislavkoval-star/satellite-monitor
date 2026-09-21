@@ -9,15 +9,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "www.beattheheatdxb.ae": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "laperle.platinumlist.net": {
    "fails": 0,
    "down": false,
@@ -27,17 +18,8 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "ibiza-tickets.co": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "tickets.expocitydubai.com": {
-   "fails": 930,
+   "fails": 931,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
@@ -82,19 +64,28 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 48,
+   "fails": 49,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
    "lastSslAlertAt": null,
    "lastReason": "нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты (2 попытки)",
    "lastFailureKind": "content"
+  },
+  "platenemlest.com": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-09-21T07:07:12.882Z",
+ "updatedAt": "2026-09-21T13:59:54.635Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-09-21T07:07:12.881Z",
+  "lastRunAt": "2026-09-21T13:59:54.634Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
