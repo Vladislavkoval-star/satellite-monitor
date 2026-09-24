@@ -56,7 +56,7 @@
    "lastFailureKind": null
   },
   "qt-platinumlist.cc": {
-   "fails": 110,
+   "fails": 111,
    "down": true,
    "downSince": "2026-09-08T11:08:45.859Z",
    "lastAlertAt": "2026-09-08T11:08:45.859Z",
@@ -83,7 +83,7 @@
    "lastFailureKind": null
   },
   "platenumlest.com": {
-   "fails": 17,
+   "fails": 18,
    "down": true,
    "downSince": "2026-09-21T13:58:27.751Z",
    "lastAlertAt": "2026-09-21T13:58:27.751Z",
@@ -92,15 +92,15 @@
    "lastFailureKind": "dns"
   }
  },
- "updatedAt": "2026-09-24T02:07:06.956Z",
+ "updatedAt": "2026-09-24T07:33:29.435Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 2,
+  "samples": 3,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-09-24T02:07:06.954Z",
+  "lastRunAt": "2026-09-24T07:33:29.434Z",
   "lastAlertAt": null
  }
 }
