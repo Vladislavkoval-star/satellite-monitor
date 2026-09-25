@@ -56,7 +56,7 @@
    "lastFailureKind": null
   },
   "qt-platinumlist.cc": {
-   "fails": 117,
+   "fails": 118,
    "down": true,
    "downSince": "2026-09-08T11:08:45.859Z",
    "lastAlertAt": "2026-09-08T11:08:45.859Z",
@@ -74,16 +74,16 @@
    "lastFailureKind": null
   },
   "platenemlest.com": {
-   "fails": 2,
-   "down": true,
-   "downSince": "2026-09-25T01:43:42.828Z",
-   "lastAlertAt": "2026-09-25T01:43:42.828Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "сетевая ошибка: ETIMEDOUT (3 попытки)",
-   "lastFailureKind": "transport"
+   "lastReason": null,
+   "lastFailureKind": null
   },
   "platenumlest.com": {
-   "fails": 24,
+   "fails": 25,
    "down": true,
    "downSince": "2026-09-21T13:58:27.751Z",
    "lastAlertAt": "2026-09-21T13:58:27.751Z",
@@ -92,15 +92,15 @@
    "lastFailureKind": "dns"
   }
  },
- "updatedAt": "2026-09-25T06:39:16.103Z",
+ "updatedAt": "2026-09-25T12:10:36.405Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 4,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-09-25T06:39:16.102Z",
+  "lastRunAt": "2026-09-25T12:10:35.941Z",
   "lastAlertAt": null
  }
 }
