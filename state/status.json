@@ -46,17 +46,8 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "discover-abha.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "qt-platinumlist.cc": {
-   "fails": 136,
+   "fails": 137,
    "down": true,
    "downSince": "2026-09-08T11:08:45.859Z",
    "lastAlertAt": "2026-09-08T11:08:45.859Z",
@@ -83,16 +74,25 @@
    "lastFailureKind": null
   },
   "platenumlest.com": {
-   "fails": 43,
+   "fails": 44,
    "down": true,
    "downSince": "2026-09-21T13:58:27.751Z",
    "lastAlertAt": "2026-09-21T13:58:27.751Z",
    "lastSslAlertAt": null,
    "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
    "lastFailureKind": "dns"
+  },
+  "swpl.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-09-28T07:40:03.673Z",
+ "updatedAt": "2026-09-28T15:55:59.982Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -100,7 +100,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-09-28T07:40:03.671Z",
+  "lastRunAt": "2026-09-28T15:55:59.981Z",
   "lastAlertAt": null
  }
 }
