@@ -15,12 +15,6 @@
    "traffic": "high"
   },
   {
-   "host": "discover-abha.platinumlist.net",
-   "type": "satellite",
-   "probe": "/robots.txt",
-   "traffic": "high"
-  },
-  {
    "host": "platenemlest.com",
    "type": "whitelabel",
    "probe": "/",
@@ -33,12 +27,6 @@
    "traffic": "high"
   },
   {
-   "host": "uaeproleague.platinumlist.net",
-   "type": "satellite",
-   "probe": "/wp-json/",
-   "traffic": "high"
-  },
-  {
    "host": "platenumlest.com",
    "type": "whitelabel",
    "probe": "/",
@@ -46,8 +34,20 @@
    "traffic": "high"
   },
   {
+   "host": "uaeproleague.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
    "host": "london-musicals.uk",
    "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "swpl.platinumlist.net",
+   "type": "satellite",
    "probe": "/wp-json/",
    "traffic": "high"
   },
