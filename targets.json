@@ -9,15 +9,15 @@
    "traffic": "high"
   },
   {
-   "host": "dubaicomedyfestival.platinumlist.net",
-   "type": "satellite",
-   "probe": "/wp-json/",
-   "traffic": "high"
-  },
-  {
    "host": "platenemlest.com",
    "type": "whitelabel",
    "probe": "/",
+   "traffic": "high"
+  },
+  {
+   "host": "dubaicomedyfestival.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
    "traffic": "high"
   },
   {
@@ -34,12 +34,6 @@
    "traffic": "high"
   },
   {
-   "host": "uaeproleague.platinumlist.net",
-   "type": "satellite",
-   "probe": "/wp-json/",
-   "traffic": "high"
-  },
-  {
    "host": "london-musicals.uk",
    "type": "whitelabel",
    "probe": "/wp-json/",
@@ -52,10 +46,9 @@
    "traffic": "high"
   },
   {
-   "host": "qt-platinumlist.cc",
-   "type": "whitelabel",
-   "probe": "/",
-   "probe_unverified": true,
+   "host": "uaeproleague.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
    "traffic": "high"
   },
   {
@@ -63,6 +56,12 @@
    "type": "whitelabel",
    "probe": "/",
    "traffic": "high"
+  },
+  {
+   "host": "london-tickets.uk",
+   "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "low"
   }
  ]
 }
