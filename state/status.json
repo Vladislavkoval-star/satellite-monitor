@@ -56,16 +56,16 @@
    "lastFailureKind": null
   },
   "platenemlest.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-10-06T22:50:57.283Z",
+   "lastAlertAt": "2026-10-06T22:50:57.283Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "HTTP 403 (2 попытки)",
+   "lastFailureKind": "http"
   },
   "platenumlest.com": {
-   "fails": 84,
+   "fails": 85,
    "down": true,
    "downSince": "2026-09-21T13:58:27.751Z",
    "lastAlertAt": "2026-09-21T13:58:27.751Z",
@@ -92,7 +92,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-06T18:56:27.906Z",
+ "updatedAt": "2026-10-06T22:50:57.283Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -100,7 +100,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-06T18:56:27.905Z",
+  "lastRunAt": "2026-10-06T22:50:56.686Z",
   "lastAlertAt": null
  }
 }
