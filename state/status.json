@@ -65,7 +65,7 @@
    "lastFailureKind": null
   },
   "platenumlest.com": {
-   "fails": 105,
+   "fails": 106,
    "down": true,
    "downSince": "2026-09-21T13:58:27.751Z",
    "lastAlertAt": "2026-09-21T13:58:27.751Z",
@@ -92,15 +92,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-11T05:48:57.392Z",
+ "updatedAt": "2026-10-11T11:37:48.536Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 6,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-11T05:48:57.392Z",
+  "lastRunAt": "2026-10-11T11:37:48.535Z",
   "lastAlertAt": null
  }
 }
