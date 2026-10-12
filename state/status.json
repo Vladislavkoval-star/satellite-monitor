@@ -1,13 +1,13 @@
 {
  "hosts": {
   "laperle.platinumlist.net": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-10-11T23:55:46.215Z",
-   "lastAlertAt": "2026-10-11T23:55:46.215Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "HTTP 503 (2 попытки)",
-   "lastFailureKind": "http"
+   "lastReason": null,
+   "lastFailureKind": null
   },
   "dubaicomedyfestival.platinumlist.net": {
    "fails": 0,
@@ -19,13 +19,13 @@
    "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-10-11T23:55:45.731Z",
-   "lastAlertAt": "2026-10-11T23:55:45.731Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "HTTP 503 (2 попытки)",
-   "lastFailureKind": "http",
+   "lastReason": null,
+   "lastFailureKind": null,
    "dedupedWithRender": true
   },
   "london-musicals.uk": {
@@ -47,13 +47,13 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-10-11T23:55:45.731Z",
-   "lastAlertAt": "2026-10-11T23:55:45.731Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "HTTP 503 (2 попытки)",
-   "lastFailureKind": "http",
+   "lastReason": null,
+   "lastFailureKind": null,
    "dedupedWithRender": true
   },
   "platenemlest.com": {
@@ -66,7 +66,7 @@
    "lastFailureKind": null
   },
   "platenumlest.com": {
-   "fails": 109,
+   "fails": 110,
    "down": true,
    "downSince": "2026-09-21T13:58:27.751Z",
    "lastAlertAt": "2026-09-21T13:58:27.751Z",
@@ -93,15 +93,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-11T23:55:46.215Z",
+ "updatedAt": "2026-10-12T03:09:22.115Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 3,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-11T23:55:45.731Z",
+  "lastRunAt": "2026-10-12T03:09:21.716Z",
   "lastAlertAt": null
  }
 }
