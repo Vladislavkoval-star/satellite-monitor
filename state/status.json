@@ -1,13 +1,13 @@
 {
  "hosts": {
   "laperle.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-10-13T21:24:09.053Z",
+   "lastAlertAt": "2026-10-13T21:24:09.053Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "таймаут >20с (3 попытки)",
+   "lastFailureKind": "transport"
   },
   "dubaicomedyfestival.platinumlist.net": {
    "fails": 0,
@@ -19,13 +19,13 @@
    "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-10-13T21:24:08.535Z",
+   "lastAlertAt": "2026-10-13T21:24:08.535Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null,
+   "lastReason": "таймаут >20с (3 попытки)",
+   "lastFailureKind": "transport",
    "dedupedWithRender": true
   },
   "london-musicals.uk": {
@@ -48,7 +48,7 @@
    "dedupedWithRender": true
   },
   "platenemlest.com": {
-   "fails": 4,
+   "fails": 5,
    "down": true,
    "downSince": "2026-10-12T19:59:19.053Z",
    "lastAlertAt": "2026-10-12T19:59:19.053Z",
@@ -57,7 +57,7 @@
    "lastFailureKind": "dns"
   },
   "platenumlest.com": {
-   "fails": 115,
+   "fails": 116,
    "down": true,
    "downSince": "2026-09-21T13:58:27.751Z",
    "lastAlertAt": "2026-09-21T13:58:27.751Z",
@@ -93,15 +93,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-13T16:22:14.242Z",
+ "updatedAt": "2026-10-13T21:24:09.053Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 2,
+  "samples": 11,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-13T16:22:14.241Z",
+  "lastRunAt": "2026-10-13T21:24:08.535Z",
   "lastAlertAt": null
  }
 }
