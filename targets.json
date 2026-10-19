@@ -12,6 +12,7 @@
    "host": "platenemlest.com",
    "type": "whitelabel",
    "probe": "/",
+   "probe_unverified": true,
    "traffic": "high"
   },
   {
@@ -27,21 +28,14 @@
    "traffic": "high"
   },
   {
-   "host": "london-musicals.uk",
-   "type": "whitelabel",
-   "probe": "/wp-json/",
-   "traffic": "high"
-  },
-  {
-   "host": "platenumlest.com",
+   "host": "pltinumlist-jo.com",
    "type": "whitelabel",
    "probe": "/",
-   "probe_unverified": true,
    "traffic": "high"
   },
   {
-   "host": "swpl.platinumlist.net",
-   "type": "satellite",
+   "host": "london-musicals.uk",
+   "type": "whitelabel",
    "probe": "/wp-json/",
    "traffic": "high"
   },
@@ -52,15 +46,21 @@
    "traffic": "high"
   },
   {
+   "host": "sinai.platinumlist.net",
+   "type": "satellite",
+   "probe": "/robots.txt",
+   "traffic": "high"
+  },
+  {
    "host": "tickets.expocitydubai.com",
    "type": "whitelabel",
    "probe": "/",
    "traffic": "high"
   },
   {
-   "host": "platinumlist.londontheatredirect.com",
+   "host": "london-tickets.uk",
    "type": "whitelabel",
-   "probe": "/",
+   "probe": "/wp-json/",
    "traffic": "low"
   }
  ]
