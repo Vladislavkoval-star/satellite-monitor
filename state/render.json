@@ -19,7 +19,7 @@
    "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 1082,
+   "fails": 1083,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
@@ -37,7 +37,7 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 201,
+   "fails": 202,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
@@ -46,15 +46,6 @@
    "lastFailureKind": "content"
   },
   "platenemlest.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
-  "swpl.platinumlist.net": {
    "fails": 0,
    "down": false,
    "downSince": null,
@@ -72,7 +63,25 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "platinumlist.londontheatredirect.com": {
+  "pltinumlist-jo.com": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
+  },
+  "london-tickets.uk": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
+  },
+  "sinai.platinumlist.net": {
    "fails": 0,
    "down": false,
    "downSince": null,
@@ -82,10 +91,10 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-19T06:54:01.452Z",
+ "updatedAt": "2026-10-19T14:09:00.993Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-10-19T06:54:01.452Z",
+  "lastRunAt": "2026-10-19T14:09:00.993Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false

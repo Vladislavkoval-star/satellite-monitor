@@ -48,31 +48,13 @@
    "dedupedWithRender": true
   },
   "platenemlest.com": {
-   "fails": 43,
+   "fails": 44,
    "down": true,
    "downSince": "2026-10-12T19:59:19.053Z",
    "lastAlertAt": "2026-10-12T19:59:19.053Z",
    "lastSslAlertAt": null,
    "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
    "lastFailureKind": "dns"
-  },
-  "platenumlest.com": {
-   "fails": 154,
-   "down": true,
-   "downSince": "2026-09-21T13:58:27.751Z",
-   "lastAlertAt": "2026-09-21T13:58:27.751Z",
-   "lastSslAlertAt": null,
-   "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
-   "lastFailureKind": "dns"
-  },
-  "swpl.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
   },
   "tabletop-me.platinumlist.net": {
    "fails": 0,
@@ -83,7 +65,25 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "platinumlist.londontheatredirect.com": {
+  "pltinumlist-jo.com": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
+  },
+  "sinai.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
+  },
+  "london-tickets.uk": {
    "fails": 0,
    "down": false,
    "downSince": null,
@@ -93,7 +93,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-19T06:53:27.824Z",
+ "updatedAt": "2026-10-19T14:08:18.961Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -101,7 +101,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-19T06:53:27.823Z",
+  "lastRunAt": "2026-10-19T14:08:18.960Z",
   "lastAlertAt": null
  }
 }
