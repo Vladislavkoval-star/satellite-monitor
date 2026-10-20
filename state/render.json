@@ -19,7 +19,7 @@
    "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 1090,
+   "fails": 1091,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
@@ -37,7 +37,7 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 209,
+   "fails": 210,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
@@ -64,13 +64,13 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-10-20T23:21:48.413Z",
+   "lastAlertAt": "2026-10-20T23:21:48.413Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты (2 попытки)",
+   "lastFailureKind": "content"
   },
   "london-tickets.uk": {
    "fails": 0,
@@ -91,10 +91,10 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-20T20:37:01.429Z",
+ "updatedAt": "2026-10-20T23:21:48.413Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-10-20T20:37:01.429Z",
+  "lastRunAt": "2026-10-20T23:21:48.087Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
