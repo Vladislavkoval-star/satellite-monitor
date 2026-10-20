@@ -10,13 +10,13 @@
    "lastFailureKind": null
   },
   "dubaicomedyfestival.platinumlist.net": {
-   "fails": 1,
-   "down": true,
-   "downSince": "2026-10-20T17:14:12.199Z",
-   "lastAlertAt": "2026-10-20T17:14:12.199Z",
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
    "lastSslAlertAt": null,
-   "lastReason": "HTTP 522 (2 попытки)",
-   "lastFailureKind": "http"
+   "lastReason": null,
+   "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
    "fails": 0,
@@ -48,7 +48,7 @@
    "dedupedWithRender": true
   },
   "platenemlest.com": {
-   "fails": 50,
+   "fails": 51,
    "down": true,
    "downSince": "2026-10-12T19:59:19.053Z",
    "lastAlertAt": "2026-10-12T19:59:19.053Z",
@@ -93,15 +93,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-20T17:14:12.199Z",
+ "updatedAt": "2026-10-20T20:35:57.573Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 7,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-20T17:14:11.614Z",
+  "lastRunAt": "2026-10-20T20:35:57.187Z",
   "lastAlertAt": null
  }
 }
