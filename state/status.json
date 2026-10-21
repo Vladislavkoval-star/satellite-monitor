@@ -48,7 +48,7 @@
    "dedupedWithRender": true
   },
   "platenemlest.com": {
-   "fails": 57,
+   "fails": 58,
    "down": true,
    "downSince": "2026-10-12T19:59:19.053Z",
    "lastAlertAt": "2026-10-12T19:59:19.053Z",
@@ -66,13 +66,14 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-10-21T23:36:15.578Z",
+   "lastAlertAt": "2026-10-21T23:36:15.578Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "сетевая ошибка: ETIMEDOUT (3 попытки)",
+   "lastFailureKind": "transport",
+   "dedupedWithRender": true
   },
   "sinai.platinumlist.net": {
    "fails": 0,
@@ -93,15 +94,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-21T20:38:42.461Z",
+ "updatedAt": "2026-10-21T23:36:15.579Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 2,
+  "samples": 4,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-21T20:38:42.460Z",
+  "lastRunAt": "2026-10-21T23:36:15.578Z",
   "lastAlertAt": null
  }
 }
