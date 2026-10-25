@@ -48,7 +48,7 @@
    "dedupedWithRender": true
   },
   "platenemlest.com": {
-   "fails": 79,
+   "fails": 80,
    "down": true,
    "downSince": "2026-10-12T19:59:19.053Z",
    "lastAlertAt": "2026-10-12T19:59:19.053Z",
@@ -66,7 +66,7 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 1,
+   "fails": 2,
    "down": true,
    "downSince": "2026-10-25T02:04:30.613Z",
    "lastAlertAt": "2026-10-25T02:04:30.613Z",
@@ -94,7 +94,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-25T02:04:30.615Z",
+ "updatedAt": "2026-10-25T07:31:59.638Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -102,7 +102,7 @@
   "samples": 4,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-25T02:04:30.613Z",
+  "lastRunAt": "2026-10-25T07:31:59.636Z",
   "lastAlertAt": null
  }
 }
