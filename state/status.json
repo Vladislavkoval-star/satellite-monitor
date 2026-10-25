@@ -48,7 +48,7 @@
    "dedupedWithRender": true
   },
   "platenemlest.com": {
-   "fails": 83,
+   "fails": 84,
    "down": true,
    "downSince": "2026-10-12T19:59:19.053Z",
    "lastAlertAt": "2026-10-12T19:59:19.053Z",
@@ -94,7 +94,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-25T19:19:05.492Z",
+ "updatedAt": "2026-10-25T21:52:39.186Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -102,7 +102,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-25T19:19:05.491Z",
+  "lastRunAt": "2026-10-25T21:52:39.184Z",
   "lastAlertAt": null
  }
 }
