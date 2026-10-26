@@ -48,7 +48,7 @@
    "dedupedWithRender": true
   },
   "platenemlest.com": {
-   "fails": 87,
+   "fails": 88,
    "down": true,
    "downSince": "2026-10-12T19:59:19.053Z",
    "lastAlertAt": "2026-10-12T19:59:19.053Z",
@@ -75,7 +75,7 @@
    "lastFailureKind": null,
    "dedupedWithRender": true
   },
-  "sinai.platinumlist.net": {
+  "ushuaiadubai.platinumlist.net": {
    "fails": 0,
    "down": false,
    "downSince": null,
@@ -84,25 +84,25 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "london-tickets.uk": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+  "pletanemlis.com": {
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-10-26T13:59:22.244Z",
+   "lastAlertAt": "2026-10-26T13:59:22.244Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
+   "lastFailureKind": "dns"
   }
  },
- "updatedAt": "2026-10-26T07:00:18.712Z",
+ "updatedAt": "2026-10-26T13:59:22.244Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 3,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-26T07:00:18.711Z",
+  "lastRunAt": "2026-10-26T13:59:21.734Z",
   "lastAlertAt": null
  }
 }

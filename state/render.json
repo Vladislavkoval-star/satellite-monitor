@@ -19,7 +19,7 @@
    "lastFailureKind": null
   },
   "tickets.expocitydubai.com": {
-   "fails": 1126,
+   "fails": 1127,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
@@ -37,7 +37,7 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 245,
+   "fails": 246,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
@@ -64,7 +64,7 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 31,
+   "fails": 32,
    "down": true,
    "downSince": "2026-10-20T23:21:48.413Z",
    "lastAlertAt": "2026-10-20T23:21:48.413Z",
@@ -72,16 +72,7 @@
    "lastReason": "нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты (2 попытки)",
    "lastFailureKind": "content"
   },
-  "london-tickets.uk": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
-  "sinai.platinumlist.net": {
+  "ushuaiadubai.platinumlist.net": {
    "fails": 0,
    "down": false,
    "downSince": null,
@@ -91,10 +82,10 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-26T07:01:01.632Z",
+ "updatedAt": "2026-10-26T14:00:21.884Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-10-26T07:01:01.632Z",
+  "lastRunAt": "2026-10-26T14:00:21.884Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
