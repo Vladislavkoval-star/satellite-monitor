@@ -9,10 +9,9 @@
    "traffic": "high"
   },
   {
-   "host": "platenemlest.com",
+   "host": "pltinumlist-jo.com",
    "type": "whitelabel",
    "probe": "/",
-   "probe_unverified": true,
    "traffic": "high"
   },
   {
@@ -22,14 +21,15 @@
    "traffic": "high"
   },
   {
-   "host": "saleconsole.platinumlist.net",
-   "type": "satellite",
+   "host": "platenemlest.com",
+   "type": "whitelabel",
    "probe": "/",
+   "probe_unverified": true,
    "traffic": "high"
   },
   {
-   "host": "pltinumlist-jo.com",
-   "type": "whitelabel",
+   "host": "saleconsole.platinumlist.net",
+   "type": "satellite",
    "probe": "/",
    "traffic": "high"
   },
@@ -46,9 +46,16 @@
    "traffic": "high"
   },
   {
-   "host": "sinai.platinumlist.net",
+   "host": "ushuaiadubai.platinumlist.net",
    "type": "satellite",
-   "probe": "/robots.txt",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "pletanemlis.com",
+   "type": "whitelabel",
+   "probe": "/",
+   "probe_unverified": true,
    "traffic": "high"
   },
   {
@@ -56,12 +63,6 @@
    "type": "whitelabel",
    "probe": "/",
    "traffic": "high"
-  },
-  {
-   "host": "london-tickets.uk",
-   "type": "whitelabel",
-   "probe": "/wp-json/",
-   "traffic": "low"
   }
  ]
 }
