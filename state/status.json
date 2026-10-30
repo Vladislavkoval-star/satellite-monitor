@@ -48,7 +48,7 @@
    "dedupedWithRender": true
   },
   "platenemlest.com": {
-   "fails": 105,
+   "fails": 106,
    "down": true,
    "downSince": "2026-10-12T19:59:19.053Z",
    "lastAlertAt": "2026-10-12T19:59:19.053Z",
@@ -85,7 +85,7 @@
    "lastFailureKind": null
   },
   "pletanemlis.com": {
-   "fails": 18,
+   "fails": 19,
    "down": true,
    "downSince": "2026-10-26T13:59:22.244Z",
    "lastAlertAt": "2026-10-26T13:59:22.244Z",
@@ -94,15 +94,15 @@
    "lastFailureKind": "dns"
   }
  },
- "updatedAt": "2026-10-30T00:18:04.004Z",
+ "updatedAt": "2026-10-30T05:56:06.209Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 3,
+  "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-10-30T00:18:04.003Z",
+  "lastRunAt": "2026-10-30T05:56:06.207Z",
   "lastAlertAt": null
  }
 }
