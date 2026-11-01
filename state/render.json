@@ -10,16 +10,16 @@
    "lastFailureKind": null
   },
   "laperle.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-11-01T02:37:47.299Z",
+   "lastAlertAt": "2026-11-01T02:37:47.299Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты (2 попытки)",
+   "lastFailureKind": "content"
   },
   "tickets.expocitydubai.com": {
-   "fails": 1154,
+   "fails": 1155,
    "down": true,
    "downSince": "2026-08-07T01:09:06.717Z",
    "lastAlertAt": "2026-08-07T01:09:06.717Z",
@@ -37,7 +37,7 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 273,
+   "fails": 274,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
@@ -64,7 +64,7 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 59,
+   "fails": 60,
    "down": true,
    "downSince": "2026-10-20T23:21:48.413Z",
    "lastAlertAt": "2026-10-20T23:21:48.413Z",
@@ -82,10 +82,10 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-10-31T23:43:07.581Z",
+ "updatedAt": "2026-11-01T02:37:47.299Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-10-31T23:43:07.581Z",
+  "lastRunAt": "2026-11-01T02:37:46.861Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
