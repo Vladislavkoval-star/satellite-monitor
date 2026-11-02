@@ -15,16 +15,15 @@
    "traffic": "high"
   },
   {
-   "host": "dubaicomedyfestival.platinumlist.net",
-   "type": "satellite",
-   "probe": "/wp-json/",
+   "host": "platinumlast.com",
+   "type": "whitelabel",
+   "probe": "/",
    "traffic": "high"
   },
   {
-   "host": "platenemlest.com",
-   "type": "whitelabel",
-   "probe": "/",
-   "probe_unverified": true,
+   "host": "dubaicomedyfestival.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
    "traffic": "high"
   },
   {
@@ -46,7 +45,7 @@
    "traffic": "high"
   },
   {
-   "host": "ushuaiadubai.platinumlist.net",
+   "host": "bred.platinumlist.net",
    "type": "satellite",
    "probe": "/wp-json/",
    "traffic": "high"
