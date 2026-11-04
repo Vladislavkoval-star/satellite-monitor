@@ -67,7 +67,7 @@
    "dedupedWithRender": true
   },
   "pletanemlis.com": {
-   "fails": 43,
+   "fails": 44,
    "down": true,
    "downSince": "2026-10-26T13:59:22.244Z",
    "lastAlertAt": "2026-10-26T13:59:22.244Z",
@@ -76,7 +76,7 @@
    "lastFailureKind": "dns"
   },
   "platinumlast.com": {
-   "fails": 2,
+   "fails": 3,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -95,15 +95,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-04T17:33:30.344Z",
+ "updatedAt": "2026-11-04T22:50:07.336Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 2,
+  "samples": 4,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-04T17:33:30.343Z",
+  "lastRunAt": "2026-11-04T22:50:07.335Z",
   "lastAlertAt": null
  }
 }
