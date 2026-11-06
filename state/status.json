@@ -57,17 +57,17 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-11-06T10:54:34.322Z",
+   "lastAlertAt": "2026-11-06T10:54:34.322Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null,
+   "lastReason": "сетевая ошибка: ETIMEDOUT (3 попытки)",
+   "lastFailureKind": "transport",
    "dedupedWithRender": true
   },
   "pletanemlis.com": {
-   "fails": 49,
+   "fails": 50,
    "down": true,
    "downSince": "2026-10-26T13:59:22.244Z",
    "lastAlertAt": "2026-10-26T13:59:22.244Z",
@@ -76,7 +76,7 @@
    "lastFailureKind": "dns"
   },
   "platinumlast.com": {
-   "fails": 8,
+   "fails": 9,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -95,15 +95,15 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-06T03:10:35.046Z",
+ "updatedAt": "2026-11-06T10:54:34.324Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 2,
+  "samples": 4,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-06T03:10:35.044Z",
+  "lastRunAt": "2026-11-06T10:54:34.322Z",
   "lastAlertAt": null
  }
 }
