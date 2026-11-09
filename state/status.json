@@ -18,16 +18,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "tickets.expocitydubai.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null,
-   "dedupedWithRender": true
-  },
   "london-musicals.uk": {
    "fails": 0,
    "down": false,
@@ -67,7 +57,7 @@
    "dedupedWithRender": true
   },
   "pletanemlis.com": {
-   "fails": 64,
+   "fails": 65,
    "down": true,
    "downSince": "2026-10-26T13:59:22.244Z",
    "lastAlertAt": "2026-10-26T13:59:22.244Z",
@@ -76,7 +66,7 @@
    "lastFailureKind": "dns"
   },
   "platinumlast.com": {
-   "fails": 23,
+   "fails": 24,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -93,9 +83,18 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "platinumlist.londontheatredirect.com": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-09T10:15:56.478Z",
+ "updatedAt": "2026-11-09T20:45:48.181Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -103,7 +102,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-09T10:15:56.477Z",
+  "lastRunAt": "2026-11-09T20:45:48.180Z",
   "lastAlertAt": null
  }
 }

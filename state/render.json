@@ -18,15 +18,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "tickets.expocitydubai.com": {
-   "fails": 1190,
-   "down": true,
-   "downSince": "2026-08-07T01:09:06.717Z",
-   "lastAlertAt": "2026-08-07T01:09:06.717Z",
-   "lastSslAlertAt": null,
-   "lastReason": "на странице \"nothing to see here\" (2 попытки)",
-   "lastFailureKind": "content"
-  },
   "london-musicals.uk": {
    "fails": 0,
    "down": false,
@@ -37,7 +28,7 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 309,
+   "fails": 310,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
@@ -55,7 +46,7 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 93,
+   "fails": 94,
    "down": true,
    "downSince": "2026-10-20T23:21:48.413Z",
    "lastAlertAt": "2026-10-20T23:21:48.413Z",
@@ -80,12 +71,21 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "platinumlist.londontheatredirect.com": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-09T10:17:08.614Z",
+ "updatedAt": "2026-11-09T20:47:59.906Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-11-09T10:17:08.614Z",
+  "lastRunAt": "2026-11-09T20:47:59.906Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
