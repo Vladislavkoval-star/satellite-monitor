@@ -18,24 +18,13 @@
    "host": "platinumlast.com",
    "type": "whitelabel",
    "probe": "/",
-   "traffic": "high"
-  },
-  {
-   "host": "dubaicomedyfestival.platinumlist.net",
-   "type": "satellite",
-   "probe": "/wp-json/",
+   "probe_unverified": true,
    "traffic": "high"
   },
   {
    "host": "saleconsole.platinumlist.net",
    "type": "satellite",
    "probe": "/",
-   "traffic": "high"
-  },
-  {
-   "host": "london-musicals.uk",
-   "type": "whitelabel",
-   "probe": "/wp-json/",
    "traffic": "high"
   },
   {
@@ -51,6 +40,18 @@
    "traffic": "high"
   },
   {
+   "host": "dubaicomedyfestival.platinumlist.net",
+   "type": "satellite",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
+   "host": "london-musicals.uk",
+   "type": "whitelabel",
+   "probe": "/wp-json/",
+   "traffic": "high"
+  },
+  {
    "host": "pletanemlis.com",
    "type": "whitelabel",
    "probe": "/",
@@ -58,7 +59,7 @@
    "traffic": "high"
   },
   {
-   "host": "tickets.expocitydubai.com",
+   "host": "platinumlist.londontheatredirect.com",
    "type": "whitelabel",
    "probe": "/",
    "traffic": "high"
