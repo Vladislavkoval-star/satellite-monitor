@@ -47,7 +47,7 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 1,
+   "fails": 2,
    "down": true,
    "downSince": "2026-11-13T16:29:57.797Z",
    "lastAlertAt": "2026-11-13T16:29:57.797Z",
@@ -57,7 +57,7 @@
    "dedupedWithRender": true
   },
   "pletanemlis.com": {
-   "fails": 79,
+   "fails": 80,
    "down": true,
    "downSince": "2026-10-26T13:59:22.244Z",
    "lastAlertAt": "2026-10-26T13:59:22.244Z",
@@ -66,7 +66,7 @@
    "lastFailureKind": "dns"
   },
   "platinumlast.com": {
-   "fails": 38,
+   "fails": 39,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -94,7 +94,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-13T16:29:57.799Z",
+ "updatedAt": "2026-11-13T22:04:25.251Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -102,7 +102,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-13T16:29:57.797Z",
+  "lastRunAt": "2026-11-13T22:04:25.250Z",
   "lastAlertAt": null
  }
 }
