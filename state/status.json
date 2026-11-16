@@ -9,15 +9,6 @@
    "lastReason": null,
    "lastFailureKind": null
   },
-  "dubaicomedyfestival.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "london-musicals.uk": {
    "fails": 0,
    "down": false,
@@ -47,7 +38,7 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 13,
+   "fails": 14,
    "down": true,
    "downSince": "2026-11-13T16:29:57.797Z",
    "lastAlertAt": "2026-11-13T16:29:57.797Z",
@@ -56,17 +47,8 @@
    "lastFailureKind": "http",
    "dedupedWithRender": true
   },
-  "pletanemlis.com": {
-   "fails": 91,
-   "down": true,
-   "downSince": "2026-10-26T13:59:22.244Z",
-   "lastAlertAt": "2026-10-26T13:59:22.244Z",
-   "lastSslAlertAt": null,
-   "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
-   "lastFailureKind": "dns"
-  },
   "platinumlast.com": {
-   "fails": 50,
+   "fails": 51,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -92,9 +74,27 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "ilt20.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
+  },
+  "pltinuumlist-jo.com": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-16T08:14:21.789Z",
+ "updatedAt": "2026-11-16T18:33:35.542Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -102,7 +102,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-16T08:14:21.787Z",
+  "lastRunAt": "2026-11-16T18:33:35.540Z",
   "lastAlertAt": null
  }
 }

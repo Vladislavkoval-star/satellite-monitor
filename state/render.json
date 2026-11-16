@@ -1,14 +1,5 @@
 {
  "hosts": {
-  "dubaicomedyfestival.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
-  },
   "laperle.platinumlist.net": {
    "fails": 0,
    "down": false,
@@ -28,7 +19,7 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 336,
+   "fails": 337,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
@@ -80,12 +71,30 @@
    "lastSslAlertAt": null,
    "lastReason": null,
    "lastFailureKind": null
+  },
+  "ilt20.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
+  },
+  "pltinuumlist-jo.com": {
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-11-16T18:34:38.106Z",
+   "lastAlertAt": "2026-11-16T18:34:38.106Z",
+   "lastSslAlertAt": null,
+   "lastReason": "нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты (2 попытки)",
+   "lastFailureKind": "content"
   }
  },
- "updatedAt": "2026-11-16T08:14:57.868Z",
+ "updatedAt": "2026-11-16T18:34:38.106Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-11-16T08:14:57.868Z",
+  "lastRunAt": "2026-11-16T18:34:37.572Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
