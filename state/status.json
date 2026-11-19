@@ -38,17 +38,17 @@
    "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
-   "fails": 22,
+   "fails": 23,
    "down": true,
    "downSince": "2026-11-13T16:29:57.797Z",
    "lastAlertAt": "2026-11-13T16:29:57.797Z",
    "lastSslAlertAt": null,
-   "lastReason": "HTTP 403 (2 попытки)",
-   "lastFailureKind": "http",
+   "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
+   "lastFailureKind": "dns",
    "dedupedWithRender": true
   },
   "platinumlast.com": {
-   "fails": 59,
+   "fails": 60,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -94,7 +94,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-19T04:33:18.383Z",
+ "updatedAt": "2026-11-19T13:48:28.559Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -102,7 +102,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-19T04:33:18.382Z",
+  "lastRunAt": "2026-11-19T13:48:28.558Z",
   "lastAlertAt": null
  }
 }
