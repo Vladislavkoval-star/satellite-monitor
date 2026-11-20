@@ -19,7 +19,7 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 348,
+   "fails": 349,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
@@ -82,7 +82,7 @@
    "lastFailureKind": null
   },
   "pltinuumlist-jo.com": {
-   "fails": 12,
+   "fails": 13,
    "down": true,
    "downSince": "2026-11-16T18:34:38.106Z",
    "lastAlertAt": "2026-11-16T18:34:38.106Z",
@@ -91,10 +91,10 @@
    "lastFailureKind": "content"
   }
  },
- "updatedAt": "2026-11-20T02:44:21.064Z",
+ "updatedAt": "2026-11-20T10:33:38.384Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-11-20T02:44:21.064Z",
+  "lastRunAt": "2026-11-20T10:33:38.384Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
