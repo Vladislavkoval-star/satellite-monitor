@@ -19,22 +19,13 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 360,
+   "fails": 361,
    "down": true,
    "downSince": "2026-09-14T13:06:29.326Z",
    "lastAlertAt": "2026-09-14T13:06:29.326Z",
    "lastSslAlertAt": null,
    "lastReason": "нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты (2 попытки)",
    "lastFailureKind": "content"
-  },
-  "tabletop-me.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
-   "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
   },
   "pltinumlist-jo.com": {
    "fails": 106,
@@ -82,19 +73,28 @@
    "lastFailureKind": null
   },
   "pltinuumlist-jo.com": {
-   "fails": 24,
+   "fails": 25,
    "down": true,
    "downSince": "2026-11-16T18:34:38.106Z",
    "lastAlertAt": "2026-11-16T18:34:38.106Z",
    "lastSslAlertAt": null,
    "lastReason": "нечего купить: ни цены, ни CTA, ни кнопок, ни ссылок на билеты (2 попытки)",
    "lastFailureKind": "content"
+  },
+  "hafer.platinumlist.net": {
+   "fails": 0,
+   "down": false,
+   "downSince": null,
+   "lastAlertAt": null,
+   "lastSslAlertAt": null,
+   "lastReason": null,
+   "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-23T09:50:30.343Z",
+ "updatedAt": "2026-11-23T21:45:01.971Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-11-23T09:50:30.342Z",
+  "lastRunAt": "2026-11-23T21:45:01.971Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
