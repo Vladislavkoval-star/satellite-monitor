@@ -1,13 +1,13 @@
 {
  "hosts": {
   "laperle.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-11-25T09:16:39.903Z",
+   "lastAlertAt": "2026-11-25T09:16:39.903Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "таймаут >20с (3 попытки)",
+   "lastFailureKind": "transport"
   },
   "london-musicals.uk": {
    "fails": 0,
@@ -19,17 +19,17 @@
    "lastFailureKind": null
   },
   "saleconsole.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-11-25T09:16:39.321Z",
+   "lastAlertAt": "2026-11-25T09:16:39.321Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null,
+   "lastReason": "таймаут >20с (3 попытки)",
+   "lastFailureKind": "transport",
    "dedupedWithRender": true
   },
   "pltinumlist-jo.com": {
-   "fails": 41,
+   "fails": 42,
    "down": true,
    "downSince": "2026-11-13T16:29:57.797Z",
    "lastAlertAt": "2026-11-13T16:29:57.797Z",
@@ -39,7 +39,7 @@
    "dedupedWithRender": true
   },
   "platinumlast.com": {
-   "fails": 78,
+   "fails": 79,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -85,24 +85,24 @@
    "lastFailureKind": null
   },
   "hafer.platinumlist.net": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-11-25T09:16:39.903Z",
+   "lastAlertAt": "2026-11-25T09:16:39.903Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "таймаут >20с (3 попытки)",
+   "lastFailureKind": "transport"
   }
  },
- "updatedAt": "2026-11-25T00:48:12.869Z",
+ "updatedAt": "2026-11-25T09:16:39.903Z",
  "connectivity": {
   "blind": false,
   "since": null,
   "consecutive": 0,
-  "samples": 2,
+  "samples": 11,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-25T00:48:12.868Z",
+  "lastRunAt": "2026-11-25T09:16:39.321Z",
   "lastAlertAt": null
  }
 }

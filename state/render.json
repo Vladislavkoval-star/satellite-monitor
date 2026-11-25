@@ -73,7 +73,7 @@
    "lastFailureKind": null
   },
   "pltinuumlist-jo.com": {
-   "fails": 28,
+   "fails": 29,
    "down": true,
    "downSince": "2026-11-16T18:34:38.106Z",
    "lastAlertAt": "2026-11-16T18:34:38.106Z",
@@ -91,10 +91,10 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-25T00:48:55.488Z",
+ "updatedAt": "2026-11-25T09:17:17.456Z",
  "transportStorm": {
   "consecutive": 0,
-  "lastRunAt": "2026-11-25T00:48:55.488Z",
+  "lastRunAt": "2026-11-25T09:17:17.456Z",
   "hosts": [],
   "suppressed": false,
   "escalated": false
