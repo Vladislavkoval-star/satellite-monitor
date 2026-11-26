@@ -29,7 +29,7 @@
    "dedupedWithRender": true
   },
   "pltinumlist-jo.com": {
-   "fails": 44,
+   "fails": 45,
    "down": true,
    "downSince": "2026-11-13T16:29:57.797Z",
    "lastAlertAt": "2026-11-13T16:29:57.797Z",
@@ -39,7 +39,7 @@
    "dedupedWithRender": true
   },
   "platinumlast.com": {
-   "fails": 81,
+   "fails": 82,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -76,13 +76,14 @@
    "lastFailureKind": null
   },
   "pltinuumlist-jo.com": {
-   "fails": 0,
-   "down": false,
-   "downSince": null,
-   "lastAlertAt": null,
+   "fails": 1,
+   "down": true,
+   "downSince": "2026-11-26T10:55:43.937Z",
+   "lastAlertAt": "2026-11-26T10:55:43.937Z",
    "lastSslAlertAt": null,
-   "lastReason": null,
-   "lastFailureKind": null
+   "lastReason": "DNS не резолвится (ENOTFOUND) (2 попытки)",
+   "lastFailureKind": "dns",
+   "dedupedWithRender": true
   },
   "hafer.platinumlist.net": {
    "fails": 0,
@@ -94,7 +95,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-26T02:15:37.361Z",
+ "updatedAt": "2026-11-26T10:55:43.938Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -102,7 +103,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-26T02:15:37.359Z",
+  "lastRunAt": "2026-11-26T10:55:43.937Z",
   "lastAlertAt": null
  }
 }
