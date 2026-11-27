@@ -29,7 +29,7 @@
    "dedupedWithRender": true
   },
   "pltinumlist-jo.com": {
-   "fails": 47,
+   "fails": 48,
    "down": true,
    "downSince": "2026-11-13T16:29:57.797Z",
    "lastAlertAt": "2026-11-13T16:29:57.797Z",
@@ -39,7 +39,7 @@
    "dedupedWithRender": true
   },
   "platinumlast.com": {
-   "fails": 84,
+   "fails": 85,
    "down": true,
    "downSince": "2026-11-04T09:46:42.991Z",
    "lastAlertAt": "2026-11-04T09:46:42.991Z",
@@ -76,7 +76,7 @@
    "lastFailureKind": null
   },
   "pltinuumlist-jo.com": {
-   "fails": 3,
+   "fails": 4,
    "down": true,
    "downSince": "2026-11-26T10:55:43.937Z",
    "lastAlertAt": "2026-11-26T10:55:43.937Z",
@@ -95,7 +95,7 @@
    "lastFailureKind": null
   }
  },
- "updatedAt": "2026-11-27T02:31:13.324Z",
+ "updatedAt": "2026-11-27T11:20:40.863Z",
  "connectivity": {
   "blind": false,
   "since": null,
@@ -103,7 +103,7 @@
   "samples": 2,
   "blindSamples": 0,
   "codes": [],
-  "lastRunAt": "2026-11-27T02:31:13.323Z",
+  "lastRunAt": "2026-11-27T11:20:40.862Z",
   "lastAlertAt": null
  }
 }
